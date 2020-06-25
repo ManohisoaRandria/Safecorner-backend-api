@@ -1,0 +1,375 @@
+{
+	"info": {
+		"_postman_id": "6eb2984a-cdb4-44ee-bcd8-a1c2b2f36abd",
+		"name": "safecorner",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "insert prestation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"prix\":2001.23,\n\t\"societe\":\"DES0001\",\n\t\"description\":\"pour toute votre vitres\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/prestation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"prestation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert societe desinfection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nom\":\"a clean\",\n\t\"description\":\"societe de renom international\",\n\t\"lieu\":\"Ampadrana\",\n\t\"email\":\"a@a.a\",\n\t\"tel\":\"0334040025\",\n\t\"coordLat\":2012,\n\t\"coordLong\":-201.22\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/societeDesinfect",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"societeDesinfect"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert protocole",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nom\":\"katsatsaka\",\n\t\"description\":\"mila manao gel isika rehetra\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/protocoles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"protocoles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get protocole by societe",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/protocoles?societe=SOC0006&type=all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"protocoles"
+					],
+					"query": [
+						{
+							"key": "societe",
+							"value": "SOC0006"
+						},
+						{
+							"key": "type",
+							"value": "all"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "modify protocole societe(delete,update)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"societe\":\"SOC0006\",\n\t\"protocoleChoisi\":[\n\t\t{\n\t\t\t\"idProtocole\":\"PRT0004\",\n\t\t\t\"duree\":24\n\t\t},\n\t\t{\n\t\t\t\"idProtocole\":\"PRT0005\",\n\t\t\t\"duree\":22\n\t\t}\n\t],\n\t\"delete\":\"true\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/protocoleChoisi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"protocoleChoisi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get societe desinfect paginaiton",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/societeDesinfect?page=1&count=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"societeDesinfect"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "count",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nom\":\"rakoto\",\r\n    \"mdp\":\"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "inscri",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nom\":\"rakoto\",\r\n    \"mdp\":\"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/user/registration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"user",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "initialisation token mobile",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "sc-init",
+						"value": "sdfsdf",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/mobile/init",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"mobile",
+						"init"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert societe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"nom\":\"b clean\",\r\n\t\"description\":\"societe de renom international\",\r\n\t\"lieu\":\"Ampadrana\",\r\n\t\"email\":\"b@b.b\",\r\n\t\"tel\":\"0334040025\",\r\n\t\"coordLat\":2012,\r\n\t\"coordLong\":-201.22,\r\n    \"idCategorieSociete\":\"CS0001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/societe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"societe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert categorie societe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"description\":\"supermarché\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/categorieSociete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"categorieSociete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addProtocoleChoisi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"idSociete\":\"SOC0006\",\r\n\t\"idCategorieProtocole\":\"CTP0002\",\r\n\t\"protocoleChoisi\":[\r\n        {\r\n            \"idProtocole\":\"PRT0004\",\r\n            \"duree\":2\r\n        },\r\n        {\r\n            \"idProtocole\":\"PRT0005\",\r\n            \"duree\":2\r\n        },{\r\n            \"idProtocole\":\"PRT0003\",\r\n            \"duree\":2\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/safecorner/api/v1/addProtocoleChoisi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"safecorner",
+						"api",
+						"v1",
+						"addProtocoleChoisi"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
