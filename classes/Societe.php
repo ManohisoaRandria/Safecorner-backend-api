@@ -271,7 +271,7 @@ class Societe implements JsonSerializable
     public function insert(PDO $con)
     {
         try {
-            $sql = "INSERT INTO societe(id,nom,idcategoriesociete,description,lieu,datecreation,email,tel,coordonnee) VALUES(?,?,?,?,?,?,?,?,ST_GeomFromGeoJSON(?))";
+            $sql = "INSERT INTO societe(id,nom,idcategoriesociete,description,lieu,datecreation,email,tel,coordonnee) VALUES(?,?,?,?,?,?,?,?,ST_GeomFromText(?))";
             $result = $con->prepare($sql);
             $date = $this->getDateCreation()->format('Y-m-d H:i:s');
             $result->execute([$this->getId(), $this->getNom(), $this->getIdCategorieSociete(), $this->getDescription(), $this->getLieu(), $date, $this->getEmail(), $this->getTel(), $this->getCoordonnee()]);
@@ -283,11 +283,11 @@ class Societe implements JsonSerializable
         }
     }
     //get all protocole
-    public function getAllProtocolesChoisi($categorieProtocole,$con)
+    public function getAllProtocolesChoisi($categorieProtocole, $con)
     {
         $res = null;
         try {
-            $temp = new ProtocoleChoisi(null,null,null,null,null,null,null);
+            $temp = new ProtocoleChoisi(null, null, null, null, null, null, null);
             $res = GenericDb::find($temp, 'protocoleChoisi', array('idsociete' => $this->getId(), 'idcategorieprotocole' => $categorieProtocole), "", $con);
         } catch (Exception $e) {
             throw $e;
@@ -296,34 +296,35 @@ class Societe implements JsonSerializable
     }
 
     //getCountProtocoleSociete
-    public function getCountProtocole($con){
-        try{
+    public function getCountProtocole($con)
+    {
+        try {
             $res = 0;
             $sql = "select count(*) as nb from protocolechoisi where idsociete = ? and etat='1'";
             $exec = $con->prepare($sql);
             $exec->execute([$this->getId()]);
             $result = $exec->fetchAll(PDO::FETCH_ASSOC);
-            if(Count($result) > 1){
-                throw new Exception("Error in server: count protocole societe",Constante::$ERROR_CODE['500']);
+            if (Count($result) > 1) {
+                throw new Exception("Error in server: count protocole societe", Constante::$ERROR_CODE['500']);
             }
-            foreach($result as $data){
+            foreach ($result as $data) {
                 $res = $data['nb'];
                 break;
             }
             return $res;
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
     }
 
     //getHistoriqueChangementProtocoleDetail To Day
-    public function getHistoriqueChangementProtocoleDetailToDay(PDO $con){
+    public function getHistoriqueChangementProtocoleDetailToDay(PDO $con)
+    {
         $res = array();
-        try{
+        try {
             //conrolle valeur
-            if($this->id == ""||$this->id == null){
-                throw new Exception("Societe not found.",Constante::$ERROR_CODE['400']);
+            if ($this->id == "" || $this->id == null) {
+                throw new Exception("Societe not found.", Constante::$ERROR_CODE['400']);
             }
             $nowDate = new DateTime();
             $nowString = $nowDate->format('Y-m-d');
@@ -331,90 +332,93 @@ class Societe implements JsonSerializable
                 datechangement >= '%s 00:00:00' and 
                 datechangement <= '%s 23:59:59' 
                 order by datechangement desc;";
-            $afterWhere = sprintf($afterWhere,$this->id,$nowString,$nowString);
+            $afterWhere = sprintf($afterWhere, $this->id, $nowString, $nowString);
 
             $res = GenericDb::find(
-                HistoriqueChangementProtocoleDetail::class, 
+                HistoriqueChangementProtocoleDetail::class,
                 'HistoriqueChangementProtocoleDetail',
                 array(),
                 $afterWhere,
-                $con);
-        }
-        catch(Exception $e){
+                $con
+            );
+        } catch (Exception $e) {
             throw $e;
         }
         return $res;
     }
 
     //getHistoriqueChangementProtocoleDetail
-    public function getHistoriqueChangementProtocoleDetail(int $mois,int $annee,PDO $con){
+    public function getHistoriqueChangementProtocoleDetail(int $mois, int $annee, PDO $con)
+    {
         $res = array();
-        try{
+        try {
             //conrolle valeur
-            if($this->id == ""||$this->id == null){
-                throw new Exception("Societe not found.",Constante::$ERROR_CODE['400']);
-            }
-            else if($mois<1 || $mois>12){
-                throw new Exception("mois must from 1 to 12",Constante::$ERROR_CODE['400']);
-            }else if($annee<1900){
-                throw new Exception("annee < 1900",Constante::$ERROR_CODE['400']);
+            if ($this->id == "" || $this->id == null) {
+                throw new Exception("Societe not found.", Constante::$ERROR_CODE['400']);
+            } else if ($mois < 1 || $mois > 12) {
+                throw new Exception("mois must from 1 to 12", Constante::$ERROR_CODE['400']);
+            } else if ($annee < 1900) {
+                throw new Exception("annee < 1900", Constante::$ERROR_CODE['400']);
             }
             $afterWhere = "Where 
                 idsociete = '%s' and
                 EXTRACT(YEAR FROM datechangement) = %f and 
                 EXTRACT(MONTH FROM datechangement) = %f 
                 order by datechangement desc";
-            $afterWhere = sprintf($afterWhere,$this->id,$annee,$mois);
-            $res = GenericDb::find(HistoriqueChangementProtocoleDetail::class, 
+            $afterWhere = sprintf($afterWhere, $this->id, $annee, $mois);
+            $res = GenericDb::find(
+                HistoriqueChangementProtocoleDetail::class,
                 'HistoriqueChangementProtocoleDetail',
                 array(),
                 $afterWhere,
-                $con);
-        }
-        catch(Exception $e){
+                $con
+            );
+        } catch (Exception $e) {
             throw $e;
         }
         return $res;
     }
 
     //getHistoriqueDescente
-    public function getHistoriqueDescenete(int $mois,int $annee,PDO $con){
+    public function getHistoriqueDescenete(int $mois, int $annee, PDO $con)
+    {
         $res = array();
-        try{
+        try {
             //conrolle valeur
-            if($this->id == ""||$this->id == null){
-                throw new Exception("Societe not found.",Constante::$ERROR_CODE['400']);
-            }
-            else if($mois<1 || $mois>12){
-                throw new Exception("mois must from 1 to 12",Constante::$ERROR_CODE['400']);
-            }else if($annee<1900){
-                throw new Exception("annee < 1900",Constante::$ERROR_CODE['400']);
+            if ($this->id == "" || $this->id == null) {
+                throw new Exception("Societe not found.", Constante::$ERROR_CODE['400']);
+            } else if ($mois < 1 || $mois > 12) {
+                throw new Exception("mois must from 1 to 12", Constante::$ERROR_CODE['400']);
+            } else if ($annee < 1900) {
+                throw new Exception("annee < 1900", Constante::$ERROR_CODE['400']);
             }
             $afterWhere = "Where 
                 idsociete = '%s' and
                 EXTRACT(YEAR FROM datecreation) = %f and 
                 EXTRACT(MONTH FROM datecreation) = %f 
                 order by datecreation desc";
-            $afterWhere = sprintf($afterWhere,$this->id,$annee,$mois);
-            $res = GenericDb::find(HistoriqueDescente::class, 
+            $afterWhere = sprintf($afterWhere, $this->id, $annee, $mois);
+            $res = GenericDb::find(
+                HistoriqueDescente::class,
                 'historiqueDescente',
                 array(),
                 $afterWhere,
-                $con);
-        }
-        catch(Exception $e){
+                $con
+            );
+        } catch (Exception $e) {
             throw $e;
         }
         return $res;
     }
 
     //getHistoriqueDescenete To Day
-    public function getHistoriqueDescenteToDay(PDO $con){
+    public function getHistoriqueDescenteToDay(PDO $con)
+    {
         $res = array();
-        try{
+        try {
             //conrolle valeur
-            if($this->id == ""||$this->id == null){
-                throw new Exception("Societe not found.",Constante::$ERROR_CODE['400']);
+            if ($this->id == "" || $this->id == null) {
+                throw new Exception("Societe not found.", Constante::$ERROR_CODE['400']);
             }
             $nowDate = new DateTime();
             $nowString = $nowDate->format('Y-m-d');
@@ -422,16 +426,16 @@ class Societe implements JsonSerializable
                 datecreation >= '%s 00:00:00' and 
                 datecreation <= '%s 23:59:59' 
                 order by datecreation desc;";
-            $afterWhere = sprintf($afterWhere,$this->id,$nowString,$nowString);
+            $afterWhere = sprintf($afterWhere, $this->id, $nowString, $nowString);
 
             $res = GenericDb::find(
-                HistoriqueDescente::class, 
+                HistoriqueDescente::class,
                 'historiqueDescente',
                 array(),
                 $afterWhere,
-                $con);
-        }
-        catch(Exception $e){
+                $con
+            );
+        } catch (Exception $e) {
             throw $e;
         }
         return $res;

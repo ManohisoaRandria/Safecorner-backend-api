@@ -27,7 +27,7 @@ class SocieteDesinfection implements JsonSerializable
     {
         try {
             $sql = "INSERT INTO SocieteDesinfection(id,nom,description,email,tel,lieu,datecreation,coordonnee)
-             VALUES(?,?,?,?,?,?,?,ST_GeomFromGeoJSON(?))";
+             VALUES(?,?,?,?,?,?,?,ST_GeomFromText(?))";
             $result = $con->prepare($sql);
             $date = $this->getDateCreation()->format('Y-m-d H:i:s');
             $result->execute([
@@ -51,7 +51,7 @@ class SocieteDesinfection implements JsonSerializable
         }
     }
     public function getById(PDO $con)
-    { 
+    {
         $societeDesinfection = null;
         try {
             $sql = "SELECT id,nom,description,lieu,dateCreation,email,tel,

@@ -187,7 +187,7 @@ Flight::map('getAllSocieteDesinfection', function (string $where, PDO $con) {
 });
 Flight::map('checkLatLng', function ($coordLat, $coordLong) {
     try {
-        if (!is_numeric($coordLong) || !is_numeric($coordLat)) {
+        if (!floatval($coordLong) || !floatval($coordLat)) {
             throw new Exception("invalid coordinates", Constante::$ERROR_CODE['400']);
         }
     } catch (Exception $th) {
@@ -203,8 +203,8 @@ Flight::map('buildSql', function (string $q = "", string $cat, float $lat = null
     $bool = false;
     if ($lat != null && $lng != null) {
         $table = " (SELECT *,
-      ST_Intersects(ST_Buffer(ST_GeomFromGeoJSON('{\"type\":\"Point\",\"coordinates\":[%.8f,%.8f]}'),%u,'quad_segs=8'),
-      coordonnee) as etat 
+      ST_Intersects(ST_Buffer(ST_Transform('SRID=4326;POINT(%.8f %.8f)'::geometry, 3857),%u,'quad_segs=8'),
+      ST_Transform(ST_AsEWKT(coordonnee), 3857)) as etat 
       FROM societeSearch) as societe WHERE etat = 't' ";
         $table = sprintf($table, $lat, $lng, Constante::$SEARCH_RADIUS);
         $bool = true;

@@ -148,7 +148,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function 
       $lieu = $req->data->lieu;
       $description = $req->data->description;
       $tel = $req->data->tel;
-      $coordonnee = '{"type":"Point","coordinates":[%f,%f]}';
+      $coordonnee = 'SRID=4326;POINT(%.8f %.8f)';
       $coordonnee = sprintf($coordonnee, $req->data->coordLat, $req->data->coordLong);
       $date = new DateTime();
 
@@ -457,7 +457,7 @@ Flight::route('GET ' . Constante::$BASE . 'search', function () {
       //raha lat sy lng ftsn
       //mbola verifiena ho tena nb ve
       Flight::checkLatLng($req->query['lat'], $req->query['lng']);
-      $sql = Flight::buildSql("", $req->query['cat'], $req->query['lat'], $req->query['lng']);
+      $sql = Flight::buildSql("", $req->query['cat'], floatval($req->query['lat']), floatval($req->query['lng']));
       $dataReturn = Flight::executeSearch($sql, Flight::db());
       Flight::json(
         new ApiResponse("succes", Constante::$SUCCES_CODE['200'], $dataReturn, "protocoles"),
@@ -475,7 +475,7 @@ Flight::route('GET ' . Constante::$BASE . 'search', function () {
       //raha ohatra hoe misy do izy rehztra
       //mbl verifierna le latitude sy longitude
       Flight::checkLatLng($req->query['lat'], $req->query['lng']);
-      $sql = Flight::buildSql($req->query['q'], $req->query['cat'], $req->query['lat'], $req->query['lng']);
+      $sql = Flight::buildSql($req->query['q'], $req->query['cat'], floatval($req->query['lat']), floatval($req->query['lng']));
       $dataReturn = Flight::executeSearch($sql, Flight::db());
       Flight::json(
         new ApiResponse("succes", Constante::$SUCCES_CODE['200'], $dataReturn, "protocoles"),
@@ -487,7 +487,7 @@ Flight::route('GET ' . Constante::$BASE . 'search', function () {
   } catch (Exception $ex) {
     if ($ex->getCode() != 500) {
       Flight::json(
-        new ApiResponse("error", $ex->getCode(), null, $ex->getMessage()),
+        new ApiResponse("error", 400, null, $ex->getMessage()),
         400
       );
     } else {

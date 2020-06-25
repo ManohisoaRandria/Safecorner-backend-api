@@ -154,3 +154,19 @@ FROM (
   ) as societe
 WHERE
   etat = 't';
+-- //test intersect
+select
+  ST_Intersects(
+    ST_Buffer(
+      ST_Transform(
+        'SRID=4326;POINT(-18.904145 47.533764)' :: geometry,
+        3857
+      ),
+      7,
+      'quad_segs=8'
+    ),
+    ST_Transform(
+      'SRID=4326;POINT(-18.902562 47.532686)' :: geometry,
+      3857
+    )
+  ) as lt;

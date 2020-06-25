@@ -4,9 +4,9 @@ Flight::route(Constante::$BASE . 'test', function () {
     $con = Flight::db();
     $req = Flight::request();
     try {
-        $res = Flight::societeNearby(-18.829834,47.513142,0.00561,$con);
+        $res = Flight::societeNearby(-18.829834, 47.513142, 0.00561, $con);
         Flight::json(
-            new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Societe inserted"),
+            new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Societe inserted"),
             Constante::$SUCCES_CODE['201']
         );
     } catch (Exception $e) {
@@ -54,7 +54,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societe', function () {
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Categorie not found"),
             Constante::$ERROR_CODE['400']
         );
-    }else {
+    } else {
         $con = Flight::db();
         try {
             $con->beginTransaction();
@@ -67,27 +67,27 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societe', function () {
                 throw new Exception("This email already exists.", Constante::$ERROR_CODE['400']);
             }
             //verification type variable lat et long
-            if(!is_numeric($req->data->coordLat)||!is_numeric($req->data->coordLong)){
-                throw new Exception("Variable type latitude and longitude no numeric.",Constante::$ERROR_CODE['400']);
+            if (!is_numeric($req->data->coordLat) || !is_numeric($req->data->coordLong)) {
+                throw new Exception("Variable type latitude and longitude no numeric.", Constante::$ERROR_CODE['400']);
             }
             //Données
-            $id = 'SOC'.GenericDb::formatNumber(GenericDb::getNextVal("seq_protocole", $con), Constante::$ID_COUNT);
+            $id = 'SOC' . GenericDb::formatNumber(GenericDb::getNextVal("seq_protocole", $con), Constante::$ID_COUNT);
             $idCategoriteSociete = $req->data->idCategorieSociete;
             $nom = $req->data->nom;
             $email = $req->data->email;
             $lieu = $req->data->lieu;
             $description = $req->data->description;
             $tel = $req->data->tel;
-            $coordonnee = '{"type":"Point","coordinates":[%.8f,%.8f]}';
+            $coordonnee = 'SRID=4326;POINT(%.8f %.8f)';
             $coordonnee = sprintf($coordonnee, $req->data->coordLat, $req->data->coordLong);
             $date = new DateTime();
-            $res = new Societe($id, $nom, $idCategoriteSociete,$description, $lieu, $date, $email, $tel, $coordonnee);
+            $res = new Societe($id, $nom, $idCategoriteSociete, $description, $lieu, $date, $email, $tel, $coordonnee);
             //insertion
             $res->insert($con);
             $con->commit();
 
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Societe inserted"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Societe inserted"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -122,13 +122,12 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'addProtocoleChoisi', functio
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "CategorieProtocole not found"),
             Constante::$ERROR_CODE['400']
         );
-    }else if (!isset($req->data->protocoleChoisi) || $req->data->protocoleChoisi == "") {
+    } else if (!isset($req->data->protocoleChoisi) || $req->data->protocoleChoisi == "") {
         Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "ProtocoleChoisi not found"),
             Constante::$ERROR_CODE['400']
         );
-    }
-    else{
+    } else {
         $con = Flight::db();
         try {
             $con->beginTransaction();
@@ -137,19 +136,19 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'addProtocoleChoisi', functio
             $idSociete = $req->data->idSociete;
             $idCategorieProtocole = $req->data->idCategorieProtocole;
             $protocoleChoisi = $req->data->protocoleChoisi;
-            $societe = new Societe($idSociete,null,null,null,null,null,null,null,null);
+            $societe = new Societe($idSociete, null, null, null, null, null, null, null, null);
             $societe = $societe->getById($con);
             //Action: ajoute se qui manque et supprime se qui ne sont pas dans le $protocoleChoisi
-            $nbWarn = Flight::addProtocoleChoisi($societe,$idCategorieProtocole,$protocoleChoisi,$con);
+            $nbWarn = Flight::addProtocoleChoisi($societe, $idCategorieProtocole, $protocoleChoisi, $con);
             //resultat
-            if($nbWarn > 0){
+            if ($nbWarn > 0) {
                 Flight::json(
-                    new ApiResponse("succes", Constante::$SUCCES_CODE['201'],null, "ProtocoleChoisi add but ".$nbWarn." already exist"),
+                    new ApiResponse("succes", Constante::$SUCCES_CODE['201'], null, "ProtocoleChoisi add but " . $nbWarn . " already exist"),
                     Constante::$SUCCES_CODE['201']
                 );
-            }else{
+            } else {
                 Flight::json(
-                    new ApiResponse("succes", Constante::$SUCCES_CODE['201'],null, "ProtocoleChoisi add"),
+                    new ApiResponse("succes", Constante::$SUCCES_CODE['201'], null, "ProtocoleChoisi add"),
                     Constante::$SUCCES_CODE['201']
                 );
             }
@@ -173,7 +172,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'addProtocoleChoisi', functio
     }
 });
 
-Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieSociete',function(){
+Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieSociete', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     if (!isset($req->data->description) || $req->data->description == "") {
@@ -181,25 +180,24 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieSociete',function()
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
             Constante::$ERROR_CODE['400']
         );
-    } 
-    else{
+    } else {
         $con = Flight::db();
         try {
             $con->beginTransaction();
             //verification existance description
-            if(Flight::validationNom('categorieSociete','description',$req->data->description,$con)){
+            if (Flight::validationNom('categorieSociete', 'description', $req->data->description, $con)) {
                 throw new Exception("This description already exists.", Constante::$ERROR_CODE['400']);
-            } 
+            }
             //Donnees
-            $id = 'CS'.GenericDb::formatNumber(GenericDb::getNextVal("seq_categoriesociete",$con), Constante::$ID_COUNT);
+            $id = 'CS' . GenericDb::formatNumber(GenericDb::getNextVal("seq_categoriesociete", $con), Constante::$ID_COUNT);
             $description = $req->data->description;
             //Insertion 
-            $res = new CategorieSociete($id,$description);
+            $res = new CategorieSociete($id, $description);
             $res->insert($con);
             $con->commit();
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Categorie societe inserted"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Categorie societe inserted"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -221,7 +219,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieSociete',function()
     }
 });
 
-Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieProtocole',function(){
+Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieProtocole', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     if (!isset($req->data->description) || $req->data->description == "") {
@@ -229,25 +227,24 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieProtocole',function
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
             Constante::$ERROR_CODE['400']
         );
-    } 
-    else{
+    } else {
         $con = Flight::db();
         try {
             $con->beginTransaction();
             //verification existance description
-            if(Flight::validationNom('categorieprotocole','description',$req->data->description,$con)){
+            if (Flight::validationNom('categorieprotocole', 'description', $req->data->description, $con)) {
                 throw new Exception("This description already exists.", Constante::$ERROR_CODE['400']);
-            } 
+            }
             //Donnees
-            $id = 'CTP'.GenericDb::formatNumber(GenericDb::getNextVal("seq_categorieprotocole",$con), Constante::$ID_COUNT);
+            $id = 'CTP' . GenericDb::formatNumber(GenericDb::getNextVal("seq_categorieprotocole", $con), Constante::$ID_COUNT);
             $description = $req->data->description;
             //Insertion 
-            $res = new CategorieProtocole($id,$description);
+            $res = new CategorieProtocole($id, $description);
             $res->insert($con);
             $con->commit();
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Categorie societe inserted"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Categorie societe inserted"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -269,7 +266,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieProtocole',function
     }
 });
 
-Flight::route('POST|OPTIONS ' . Constante::$BASE . 'historiqueDescente',function(){
+Flight::route('POST|OPTIONS ' . Constante::$BASE . 'historiqueDescente', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     if (!isset($req->data->idSociete) || $req->data->idSociete == "") {
@@ -277,39 +274,37 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'historiqueDescente',function
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Societe not found"),
             Constante::$ERROR_CODE['400']
         );
-    }else if (!isset($req->data->description) || $req->data->description == "") {
+    } else if (!isset($req->data->description) || $req->data->description == "") {
         Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
             Constante::$ERROR_CODE['400']
         );
-    } 
-    else if (!isset($req->data->nombreProtocole) || $req->data->nombreProtocole == "") {
+    } else if (!isset($req->data->nombreProtocole) || $req->data->nombreProtocole == "") {
         Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Number of protocols not found"),
             Constante::$ERROR_CODE['400']
         );
-    }
-    else{
+    } else {
         $con = Flight::db();
         try {
             $con->beginTransaction();
             //Verification: existance Societe
-            if(!Flight::validationNom("societe","id",$req->data->idSociete,$con)){
-                throw new Exception("This societe does not exist.",Constante::$ERROR_CODE['400']);
+            if (!Flight::validationNom("societe", "id", $req->data->idSociete, $con)) {
+                throw new Exception("This societe does not exist.", Constante::$ERROR_CODE['400']);
             }
             //Donnees
-            $id = 'HTDE'.GenericDb::formatNumber(GenericDb::getNextVal("seq_historiquedescente",$con), Constante::$ID_COUNT);
+            $id = 'HTDE' . GenericDb::formatNumber(GenericDb::getNextVal("seq_historiquedescente", $con), Constante::$ID_COUNT);
             $idSociete = $req->data->idSociete;
             $description = $req->data->description;
-            $points = Flight::calculePoint($idSociete,$req->data->nombreProtocole,$con);
+            $points = Flight::calculePoint($idSociete, $req->data->nombreProtocole, $con);
             $date = new DateTime();
             //Insertion 
-            $res = new HistoriqueDescente($id,$idSociete,$description,$points,$date,Constante::$DESCENTE_VALIDE);
+            $res = new HistoriqueDescente($id, $idSociete, $description, $points, $date, Constante::$DESCENTE_VALIDE);
             $res->insert($con);
             $con->commit();
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "historique descente inserted"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "historique descente inserted"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -343,16 +338,16 @@ Flight::route('GET ' . Constante::$BASE . 'outProtocoleSociete', function () {
         $con = Flight::db();
         try {
             //Verification: existance Societe
-            if(!Flight::validationNom("societe","id",$req->query->idSociete,$con)){
-                throw new Exception("This societe does not exist.",Constante::$ERROR_CODE['400']);
+            if (!Flight::validationNom("societe", "id", $req->query->idSociete, $con)) {
+                throw new Exception("This societe does not exist.", Constante::$ERROR_CODE['400']);
             }
             //Donnee
             $idSociete = $req->query->idSociete;
             //Action: prendre les protocole que le societe ne fait pas
-            $res = Flight::getOutProtocoleBySociete($idSociete,$con);
+            $res = Flight::getOutProtocoleBySociete($idSociete, $con);
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -386,17 +381,17 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid password"),
             Constante::$ERROR_CODE['400']
         );
-    }else {
+    } else {
         $con = Flight::db();
         try {
             //Donnee
             $nom = $req->data->nom;
             $mdp = $req->data->mdp;
             //Action: login
-            $res = Flight::signIn($nom,$mdp,$con);
+            $res = Flight::signIn($nom, $mdp, $con);
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes login"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes login"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -430,21 +425,21 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/registration', function
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid password."),
             Constante::$ERROR_CODE['400']
         );
-    }else {
+    } else {
         $con = Flight::db();
         try {
             //Vaerification: existance nom
-            if(Flight::validationNom("users","nom",$req->data->nom,$con)){
-                throw new Exception("This name is already taken.",Constante::$ERROR_CODE['400']);
+            if (Flight::validationNom("users", "nom", $req->data->nom, $con)) {
+                throw new Exception("This name is already taken.", Constante::$ERROR_CODE['400']);
             }
             //Donnee
             $nom = $req->data->nom;
             $mdp = $req->data->mdp;
             //Action: login
-            $res = Flight::signUp($nom,$mdp,$con);
+            $res = Flight::signUp($nom, $mdp, $con);
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes registration"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes registration"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -465,7 +460,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/registration', function
     }
 });
 
-Flight::route('GET ' . Constante::$BASE . 'oneSocieteDesinfection',function(){
+Flight::route('GET ' . Constante::$BASE . 'oneSocieteDesinfection', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     if (!isset($req->query->idSocieteDesinfection) || $req->query->idSocieteDesinfection == "") {
@@ -477,22 +472,22 @@ Flight::route('GET ' . Constante::$BASE . 'oneSocieteDesinfection',function(){
         $con = Flight::db();
         try {
             //Vaerification: existance societe
-            if(!Flight::validationNom("societedesinfection","id",$req->query->idSocieteDesinfection,$con)){
-                throw new Exception("Societe desinfection not exists.",Constante::$ERROR_CODE['400']);
+            if (!Flight::validationNom("societedesinfection", "id", $req->query->idSocieteDesinfection, $con)) {
+                throw new Exception("Societe desinfection not exists.", Constante::$ERROR_CODE['400']);
             }
             //Donnee
             $idSocieteDesinfection = $req->query->idSocieteDesinfection;
             //Action: login
-            $temp = new SocieteDesinfection($idSocieteDesinfection,null,null,null,null,null,null,null);
-            $societeDesinfection=$temp->getById($con);
+            $temp = new SocieteDesinfection($idSocieteDesinfection, null, null, null, null, null, null, null);
+            $societeDesinfection = $temp->getById($con);
             $prestations = $temp->getPrestation($con);
             $res = [
-                "societeDesinfection"=>$societeDesinfection,
-                "prestation"=>$prestations
+                "societeDesinfection" => $societeDesinfection,
+                "prestation" => $prestations
             ];
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -513,7 +508,7 @@ Flight::route('GET ' . Constante::$BASE . 'oneSocieteDesinfection',function(){
     }
 });
 
-Flight::route('GET ' . Constante::$BASE . 'allSociete',function(){
+Flight::route('GET ' . Constante::$BASE . 'allSociete', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     if (!isset($req->query->all) || ($req->query->all != "true" && $req->query->all != "false")) {
@@ -521,12 +516,12 @@ Flight::route('GET ' . Constante::$BASE . 'allSociete',function(){
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "type of get societe not specify(all:true or false)"),
             Constante::$ERROR_CODE['400']
         );
-    }else if (!isset($req->query->page) || !is_numeric($req->query->page)) {
+    } else if (!isset($req->query->page) || !is_numeric($req->query->page)) {
         Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid page or not found"),
             Constante::$ERROR_CODE['400']
         );
-    }else if (!isset($req->query->limit) || !is_numeric($req->query->limit)) {
+    } else if (!isset($req->query->limit) || !is_numeric($req->query->limit)) {
         Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid limit or not found"),
             Constante::$ERROR_CODE['400']
@@ -539,10 +534,10 @@ Flight::route('GET ' . Constante::$BASE . 'allSociete',function(){
             $page = $req->query->page;
             $limit = $req->query->limit;
             //Action: login
-            $res = Flight::getAllSociete($page,$limit,$all,$con);
+            $res = Flight::getAllSociete($page, $limit, $all, $con);
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -563,7 +558,7 @@ Flight::route('GET ' . Constante::$BASE . 'allSociete',function(){
     }
 });
 
-Flight::route('GET ' . Constante::$BASE . 'allProtocole',function(){
+Flight::route('GET ' . Constante::$BASE . 'allProtocole', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     if (!isset($req->query->all) || ($req->query->all != "true" && $req->query->all != "false")) {
@@ -571,12 +566,12 @@ Flight::route('GET ' . Constante::$BASE . 'allProtocole',function(){
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "type of get protocole not specify(all:true or false)"),
             Constante::$ERROR_CODE['400']
         );
-    }else if (!isset($req->query->page) || !is_numeric($req->query->page)) {
+    } else if (!isset($req->query->page) || !is_numeric($req->query->page)) {
         Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid page or not found"),
             Constante::$ERROR_CODE['400']
         );
-    }else if (!isset($req->query->limit) || !is_numeric($req->query->limit)) {
+    } else if (!isset($req->query->limit) || !is_numeric($req->query->limit)) {
         Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid limit or not found"),
             Constante::$ERROR_CODE['400']
@@ -589,10 +584,10 @@ Flight::route('GET ' . Constante::$BASE . 'allProtocole',function(){
             $page = $req->query->page;
             $limit = $req->query->limit;
             //Action: login
-            $res = Flight::getAllProtocole($page,$limit,$all,$con);
+            $res = Flight::getAllProtocole($page, $limit, $all, $con);
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -613,7 +608,7 @@ Flight::route('GET ' . Constante::$BASE . 'allProtocole',function(){
     }
 });
 
-Flight::route('GET ' . Constante::$BASE . 'categorieSociete',function(){
+Flight::route('GET ' . Constante::$BASE . 'categorieSociete', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     $con = Flight::db();
@@ -622,7 +617,7 @@ Flight::route('GET ' . Constante::$BASE . 'categorieSociete',function(){
         $res = Flight::getCategorieSociete($con);
         //resultat
         Flight::json(
-            new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+            new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
             Constante::$SUCCES_CODE['201']
         );
     } catch (Exception $e) {
@@ -642,7 +637,7 @@ Flight::route('GET ' . Constante::$BASE . 'categorieSociete',function(){
     }
 });
 
-Flight::route('GET ' . Constante::$BASE . 'categorieProtocole',function(){
+Flight::route('GET ' . Constante::$BASE . 'categorieProtocole', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     $con = Flight::db();
@@ -651,7 +646,7 @@ Flight::route('GET ' . Constante::$BASE . 'categorieProtocole',function(){
         $res = Flight::getCategorieProtocole($con);
         //resultat
         Flight::json(
-            new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+            new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
             Constante::$SUCCES_CODE['201']
         );
     } catch (Exception $e) {
@@ -671,7 +666,7 @@ Flight::route('GET ' . Constante::$BASE . 'categorieProtocole',function(){
     }
 });
 
-Flight::route('GET ' . Constante::$BASE . 'historiqueChangementProtocole',function(){
+Flight::route('GET ' . Constante::$BASE . 'historiqueChangementProtocole', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     $con = Flight::db();
@@ -680,8 +675,7 @@ Flight::route('GET ' . Constante::$BASE . 'historiqueChangementProtocole',functi
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Societe not found"),
             Constante::$ERROR_CODE['400']
         );
-    }
-    else if (!isset($req->query->mois) || !is_numeric($req->query->mois) || $req->query->mois == "") {
+    } else if (!isset($req->query->mois) || !is_numeric($req->query->mois) || $req->query->mois == "") {
         Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid mois"),
             Constante::$ERROR_CODE['400']
@@ -691,28 +685,27 @@ Flight::route('GET ' . Constante::$BASE . 'historiqueChangementProtocole',functi
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid annee"),
             Constante::$ERROR_CODE['400']
         );
-    }
-    else{
+    } else {
         try {
             //Vaerification: existance societe
-            if(!Flight::validationNom("societe","id",$req->query->idSociete,$con)){
-                throw new Exception("Societe not exists.",Constante::$ERROR_CODE['400']);
+            if (!Flight::validationNom("societe", "id", $req->query->idSociete, $con)) {
+                throw new Exception("Societe not exists.", Constante::$ERROR_CODE['400']);
             }
             //Donnee
             $idSociete = $req->query->idSociete;
             $mois = $req->query->mois;
             $annee = $req->query->annee;
             //Action: prendre les HistoriqueChangementprotocole de la societe par mois/annee 
-            $temp = new Societe($idSociete,null,null,null,null,null,null,null,null);
-            $Societe=$temp->getById($con);
-            $historiqueChangementProtocoles = $Societe->getHistoriqueChangementProtocoleDetail($mois,$annee,$con);
+            $temp = new Societe($idSociete, null, null, null, null, null, null, null, null);
+            $Societe = $temp->getById($con);
+            $historiqueChangementProtocoles = $Societe->getHistoriqueChangementProtocoleDetail($mois, $annee, $con);
             $res = [
-                "societe"=>$Societe,
-                "historiqueChangementProtocole"=>$historiqueChangementProtocoles
+                "societe" => $Societe,
+                "historiqueChangementProtocole" => $historiqueChangementProtocoles
             ];
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -733,7 +726,7 @@ Flight::route('GET ' . Constante::$BASE . 'historiqueChangementProtocole',functi
     }
 });
 
-Flight::route('GET ' . Constante::$BASE . 'historiqueChangementProtocoleToDay',function(){
+Flight::route('GET ' . Constante::$BASE . 'historiqueChangementProtocoleToDay', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     $con = Flight::db();
@@ -742,25 +735,25 @@ Flight::route('GET ' . Constante::$BASE . 'historiqueChangementProtocoleToDay',f
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Societe not found"),
             Constante::$ERROR_CODE['400']
         );
-    }else{
+    } else {
         try {
             //Vaerification: existance societe
-            if(!Flight::validationNom("societe","id",$req->query->idSociete,$con)){
-                throw new Exception("Societe not exists.",Constante::$ERROR_CODE['400']);
+            if (!Flight::validationNom("societe", "id", $req->query->idSociete, $con)) {
+                throw new Exception("Societe not exists.", Constante::$ERROR_CODE['400']);
             }
             //Donnee
             $idSociete = $req->query->idSociete;
             //Action: prendre les HistoriqueChangementprotocole de la societe par mois/annee 
-            $temp = new Societe($idSociete,null,null,null,null,null,null,null,null);
-            $Societe=$temp->getById($con);
+            $temp = new Societe($idSociete, null, null, null, null, null, null, null, null);
+            $Societe = $temp->getById($con);
             $historiqueChangementProtocoles = $Societe->getHistoriqueChangementProtocoleDetailToDay($con);
             $res = [
-                "societe"=>$Societe,
-                "historiqueChangementProtocole"=>$historiqueChangementProtocoles
+                "societe" => $Societe,
+                "historiqueChangementProtocole" => $historiqueChangementProtocoles
             ];
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -781,7 +774,7 @@ Flight::route('GET ' . Constante::$BASE . 'historiqueChangementProtocoleToDay',f
     }
 });
 
-Flight::route('GET ' . Constante::$BASE . 'historiqueDescente',function(){
+Flight::route('GET ' . Constante::$BASE . 'historiqueDescente', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     $con = Flight::db();
@@ -790,8 +783,7 @@ Flight::route('GET ' . Constante::$BASE . 'historiqueDescente',function(){
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Societe not found"),
             Constante::$ERROR_CODE['400']
         );
-    }
-    else if (!isset($req->query->mois) || !is_numeric($req->query->mois) || $req->query->mois == "") {
+    } else if (!isset($req->query->mois) || !is_numeric($req->query->mois) || $req->query->mois == "") {
         Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid mois"),
             Constante::$ERROR_CODE['400']
@@ -801,28 +793,27 @@ Flight::route('GET ' . Constante::$BASE . 'historiqueDescente',function(){
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid annee"),
             Constante::$ERROR_CODE['400']
         );
-    }
-    else{
+    } else {
         try {
             //Vaerification: existance societe
-            if(!Flight::validationNom("societe","id",$req->query->idSociete,$con)){
-                throw new Exception("Societe not exists.",Constante::$ERROR_CODE['400']);
+            if (!Flight::validationNom("societe", "id", $req->query->idSociete, $con)) {
+                throw new Exception("Societe not exists.", Constante::$ERROR_CODE['400']);
             }
             //Donnee
             $idSociete = $req->query->idSociete;
             $mois = $req->query->mois;
             $annee = $req->query->annee;
             //Action: prendre les HistoriqueChangementprotocole de la societe par mois/annee 
-            $temp = new Societe($idSociete,null,null,null,null,null,null,null,null);
-            $Societe=$temp->getById($con);
-            $historiqueDescente = $Societe->getHistoriqueDescenete($mois,$annee,$con);
+            $temp = new Societe($idSociete, null, null, null, null, null, null, null, null);
+            $Societe = $temp->getById($con);
+            $historiqueDescente = $Societe->getHistoriqueDescenete($mois, $annee, $con);
             $res = [
-                "societe"=>$Societe,
-                "historiqueDescente"=>$historiqueDescente
+                "societe" => $Societe,
+                "historiqueDescente" => $historiqueDescente
             ];
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
@@ -843,7 +834,7 @@ Flight::route('GET ' . Constante::$BASE . 'historiqueDescente',function(){
     }
 });
 
-Flight::route('GET ' . Constante::$BASE . 'historiqueDescenteToDay',function(){
+Flight::route('GET ' . Constante::$BASE . 'historiqueDescenteToDay', function () {
     Flight::getAccesControl();
     $req = Flight::request();
     $con = Flight::db();
@@ -852,25 +843,25 @@ Flight::route('GET ' . Constante::$BASE . 'historiqueDescenteToDay',function(){
             new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Societe not found"),
             Constante::$ERROR_CODE['400']
         );
-    }else{
+    } else {
         try {
             //Vaerification: existance societe
-            if(!Flight::validationNom("societe","id",$req->query->idSociete,$con)){
-                throw new Exception("Societe not exists.",Constante::$ERROR_CODE['400']);
+            if (!Flight::validationNom("societe", "id", $req->query->idSociete, $con)) {
+                throw new Exception("Societe not exists.", Constante::$ERROR_CODE['400']);
             }
             //Donnee
             $idSociete = $req->query->idSociete;
             //Action: prendre les HistoriqueChangementprotocole de la societe par mois/annee 
-            $temp = new Societe($idSociete,null,null,null,null,null,null,null,null);
-            $Societe=$temp->getById($con);
+            $temp = new Societe($idSociete, null, null, null, null, null, null, null, null);
+            $Societe = $temp->getById($con);
             $historiqueDescente = $Societe->getHistoriqueDescenteToDay($con);
             $res = [
-                "societe"=>$Societe,
-                "historiqueDescente"=>$historiqueDescente
+                "societe" => $Societe,
+                "historiqueDescente" => $historiqueDescente
             ];
             //resultat
             Flight::json(
-                new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res, "Succes"),
+                new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
