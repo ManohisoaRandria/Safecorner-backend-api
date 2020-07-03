@@ -24,7 +24,7 @@ require 'routes/routeBio.php';
 // Flight::register('db', 'PDO', array(, , , ,));
 
 Flight::register('db', 'PDO', array(
-  'pgsql:host=ec2-176-34-123-50.eu-west-1.compute.amazonaws.com;port=5432;dbname=d5kg541rg9ubav;options=\'-c client_encoding=utf8\'',
+  'pgsql:host=ec2-176-34-123-50.eu-west-1.compute.amazonaws.com;port=5432;dbname=d5kg541rg9ubav;options=\'--client_encoding=UTF8\'',
   'rzisjpdcxnnwui',
   '4fdd8a8eae391ab03fff4e60910ce4bed8328b3b5faa5cf75fd39bffe469b8da'
 ), function ($db) {
