@@ -609,7 +609,8 @@ Flight::route('GET ' . Constante::$BASE . 'allProtocole', function () {
 });
 
 Flight::route('GET ' . Constante::$BASE . 'categorieSociete', function () {
-    Flight::getAccesControl();
+    Flight::protectionPage("public");
+    Flight::getAccesControlPublic();
     $req = Flight::request();
     $con = Flight::db();
     try {

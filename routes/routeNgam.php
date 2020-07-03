@@ -248,8 +248,8 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
 //get protocole by societe
 // ************
 Flight::route('GET ' . Constante::$BASE . 'protocoles', function () {
-  // Flight::protectionPage("public-private");
-  Flight::getAccesControl();
+  Flight::protectionPage("public");
+  Flight::getAccesControlPublic();
   $req = Flight::request();
 
   if (!isset($req->query['societe']) || $req->query['societe'] === "") {
@@ -427,8 +427,8 @@ Flight::route('GET ' . Constante::$BASE . 'societeDesinfect', function () {
 //raha tena ho tsis dol reo rehetra reo fa categorie=all ihany de  tsy mamoka inin fa eo am accueil
 
 Flight::route('GET ' . Constante::$BASE . 'search', function () {
-
-  Flight::getAccesControl();
+  Flight::protectionPage("public");
+  Flight::getAccesControlPublic();
   $req = Flight::request();
   try {
 
