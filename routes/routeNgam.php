@@ -24,6 +24,7 @@ Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
     }
   }
 });
+// *************
 //initialisation token mobile, normalement indray ihany par idunique ana phone
 Flight::route('GET ' . Constante::$BASE . 'mobile/init', function () {
   try {
@@ -245,8 +246,9 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
   }
 });
 //get protocole by societe
+// ************
 Flight::route('GET ' . Constante::$BASE . 'protocoles', function () {
-  Flight::protectionPage("public-private");
+  // Flight::protectionPage("public-private");
   Flight::getAccesControl();
   $req = Flight::request();
 
@@ -423,7 +425,6 @@ Flight::route('GET ' . Constante::$BASE . 'societeDesinfect', function () {
 //raha tsis inin mintsy afats lat,lng de mvoka eo dol ny societe eo am manodidina
 
 //raha tena ho tsis dol reo rehetra reo fa categorie=all ihany de  tsy mamoka inin fa eo am accueil
-
 
 Flight::route('GET ' . Constante::$BASE . 'search', function () {
 
