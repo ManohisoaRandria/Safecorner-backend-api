@@ -44,7 +44,7 @@ class Constante
     public static $REFRESH_TOKEN_EXPIRE_TIME = 86400 /*1  jour*/; //seconde
     public static $REFRESH_TOKEN_VALIDE = 1;
     public static $REFRESH_TOKEN_REVOKED = 10;
-    public static $SEARCH_RADIUS = 1000; //en metre
+    public static $SEARCH_RADIUS = 1100; //en metre
     public static $REFRESH_TOKEN_KEY = "keyBackOfficeRFT-api";
     public static $REFRESH_ENCRYPTION_KEY = "keyBackOfficeRFTenc-api";
     public static $ACCES_TOKEN_KEY = "keyBackOfficeACT-api";
