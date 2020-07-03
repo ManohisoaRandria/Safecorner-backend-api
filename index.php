@@ -21,7 +21,7 @@ require 'routes/routeBio.php';
 
 
 $dbopts = parse_url(getenv('DATABASE_URL'));
-Flight::register('db', 'Connect', array($dbopts["host"], $dbopts["port"], ltrim($dbopts["path"], '/'), $dbopts["user"], $dbopts["pass"]));
+Flight::register('db', 'PDO', array($dbopts["host"], $dbopts["port"], ltrim($dbopts["path"], '/'), $dbopts["user"], $dbopts["pass"]));
 
 // Flight::register('db', 'Connect', array('localhost','5432','volako_db','volako_user','1234'));
 // Flight::register('db', 'PDO', array('pgsql:host=localhost;port=5432;dbname=safecorner_db', 'postgres', 'm1234'), function ($db) {
