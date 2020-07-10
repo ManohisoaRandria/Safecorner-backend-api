@@ -25,7 +25,10 @@ Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
   }
 });
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
-  Flight::getAccesControl();
+  header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Headers: *');
+  header('Content-Type: application/json; charset=utf-8');
+  header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
   $prot=Flight::protectionPage("logout");
   
       try {
