@@ -26,7 +26,7 @@ Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
 });
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
   $prot=Flight::protectionPage("logout");
-  Flight::getAccesControlPublic();
+  Flight::getAccesControl();
   
       try {
           $ret=Flight::logOut($prot,Flight::db());
