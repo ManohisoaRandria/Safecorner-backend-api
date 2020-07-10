@@ -33,10 +33,10 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
           // $ret=Flight::logOut($prot,Flight::db());
           $ret=$prot;
           //resultat
-          Flight::json(
-              new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null,$ret),
-              Constante::$SUCCES_CODE['204']
-          );
+          // Flight::json(
+          //     new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null,$ret),
+          //     Constante::$SUCCES_CODE['204']
+          // );
       } catch (Exception $e) {
           if ($e->getCode() != 500 && $e->getCode() != 503) {
               Flight::json(
