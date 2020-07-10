@@ -26,10 +26,10 @@ Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
 });
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
   Flight::getAccesControl();
-  $prot=Flight::protectionPage("logout");
   // $prot="logout";
   
       try {
+        $prot=Flight::protectionPage("logout");
           // $ret=Flight::logOut($prot,Flight::db());
           $ret=$prot;
           //resultat
@@ -40,8 +40,8 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
       } catch (Exception $e) {
           if ($e->getCode() != 500 && $e->getCode() != 503) {
               Flight::json(
-                  new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $e->getMessage()),
-                  Constante::$ERROR_CODE['400']
+                  new ApiResponse("error", $e->getCode(), null, $e->getMessage()),
+                  $e->getCode()
               );
           } else {
               Flight::json(

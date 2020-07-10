@@ -296,12 +296,6 @@ Flight::map('getAccesControl', function () {
     header('Access-Control-Allow-Headers: *');
     header('Content-Type: application/json; charset=utf-8');
     header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
-    if ($_SERVER['REQUEST_METHOD']== 'OPTIONS') {
-        Flight::json(
-            new ApiResponse("succes", Constante::$SUCCES_CODE['200'], null,"OK"),
-            Constante::$SUCCES_CODE['200']
-        );
-    }
 });
 Flight::map('getAccesControlPublic', function () {
     header('Access-Control-Allow-Headers:*');
@@ -338,13 +332,14 @@ Flight::map('protectionPage', function ($Pagetype) {
             $res = Flight::verifyToken($token, $verificationType);
             return $res;
         }
-    } catch (\Exception $ex) {
-        if ($ex->getCode() != 500) {
-            echo $ex->getCode();
-            Flight::halt($ex->getCode(), $ex->getMessage());
-        } else {
-            Flight::halt($ex->getCode(), "server error please contact api providers");
-        }
+    } catch (Exception $ex) {
+        // if ($ex->getCode() != 500) {
+        //     echo $ex->getCode();
+        //     Flight::halt($ex->getCode(), $ex->getMessage());
+        // } else {
+        //     Flight::halt($ex->getCode(), "server error please contact api providers");
+        // }
+        throw $ex;
     }
 });
 Flight::map('initMobileApp', function (PDO $con) {
