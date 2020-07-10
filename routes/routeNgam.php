@@ -427,7 +427,7 @@ Flight::route('GET ' . Constante::$BASE . 'societeDesinfect', function () {
 //raha tena ho tsis dol reo rehetra reo fa categorie=all ihany de  tsy mamoka inin fa eo am accueil
 
 Flight::route('GET ' . Constante::$BASE . 'search', function () {
-  Flight::protectionPage("public");
+  Flight::protectionPage("public-private");
   Flight::getAccesControlPublic();
   $req = Flight::request();
   try {
