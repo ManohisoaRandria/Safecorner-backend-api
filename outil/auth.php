@@ -292,7 +292,7 @@ Flight::map('getTokenHeader', function (string $type) {
 //Content-Type,Connection,Accept
 Flight::map('getAccesControl', function () {
     if ('OPTIONS'==$_SERVER['REQUEST_METHOD']) {
-        header("HTTP/1.1 200 OK");
+        http_response_code(200);
     }
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
