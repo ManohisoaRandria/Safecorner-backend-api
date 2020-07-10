@@ -291,13 +291,17 @@ Flight::map('getTokenHeader', function (string $type) {
 });
 //Content-Type,Connection,Accept
 Flight::map('getAccesControl', function () {
-    if ($_SERVER['REQUEST_METHOD']== 'OPTIONS') {
-        http_response_code(200);
-    }
+    
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
     header('Content-Type: application/json; charset=utf-8');
     header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
+    if ($_SERVER['REQUEST_METHOD']== 'OPTIONS') {
+        Flight::json(
+            new ApiResponse("succes", Constante::$SUCCES_CODE['200'], null,"OK"),
+            Constante::$SUCCES_CODE['200']
+        );
+    }
 });
 Flight::map('getAccesControlPublic', function () {
     header('Access-Control-Allow-Headers:*');
