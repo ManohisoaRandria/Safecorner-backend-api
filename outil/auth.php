@@ -291,9 +291,8 @@ Flight::map('getTokenHeader', function (string $type) {
 });
 //Content-Type,Connection,Accept
 Flight::map('getAccesControl', function () {
-    var_dump("meth =".$_SERVER['REQUEST_METHOD']);
     if ($_SERVER['REQUEST_METHOD']== 'OPTIONS') {
-        header("HTTP/1.1 200 OK");
+        http_response_code(200);
     }
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
