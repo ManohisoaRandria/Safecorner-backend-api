@@ -26,17 +26,17 @@ Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
 });
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
   Flight::getAccesControl();
-  // $prot=Flight::protectionPage("logout");
-  $prot="logout";
+  $prot=Flight::protectionPage("logout");
+  // $prot="logout";
   
       try {
           // $ret=Flight::logOut($prot,Flight::db());
           $ret=$prot;
           //resultat
-          // Flight::json(
-          //     new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null,$ret),
-          //     Constante::$SUCCES_CODE['204']
-          // );
+          Flight::json(
+              new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null,$ret),
+              Constante::$SUCCES_CODE['204']
+          );
       } catch (Exception $e) {
           if ($e->getCode() != 500 && $e->getCode() != 503) {
               Flight::json(
