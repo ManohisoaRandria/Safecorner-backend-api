@@ -24,6 +24,34 @@ Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
     }
   }
 });
+Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
+  $prot=Flight::protectionPage("logout");
+  Flight::getAccesControlPublic();
+  
+      try {
+          $ret=Flight::logOut($prot,Flight::db());
+          //resultat
+          Flight::json(
+              new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null,$ret),
+              Constante::$SUCCES_CODE['204']
+          );
+      } catch (Exception $e) {
+          if ($e->getCode() != 500 && $e->getCode() != 503) {
+              Flight::json(
+                  new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $e->getMessage()),
+                  Constante::$ERROR_CODE['400']
+              );
+          } else {
+              Flight::json(
+                  new ApiResponse("error", Constante::$ERROR_CODE['500'], null, $e->getMessage()),
+                  Constante::$ERROR_CODE['500']
+              );
+          }
+      } finally {
+          $con = null;
+      }
+});
+
 // *************
 //initialisation token mobile, normalement indray ihany par idunique ana phone
 Flight::route('GET ' . Constante::$BASE . 'mobile/init', function () {

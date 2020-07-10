@@ -395,15 +395,15 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
-            if ($e->getCode() == 400) {
+            if ($e->getCode() != 500 && $e->getCode() != 503) {
                 Flight::json(
                     new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $e->getMessage()),
                     Constante::$ERROR_CODE['400']
                 );
             } else {
                 Flight::json(
-                    new ApiResponse("error", Constante::$ERROR_CODE['503'], null, $e->getMessage()),
-                    Constante::$ERROR_CODE['503']
+                    new ApiResponse("error", Constante::$ERROR_CODE['500'], null, $e->getMessage()),
+                    Constante::$ERROR_CODE['500']
                 );
             }
         } finally {

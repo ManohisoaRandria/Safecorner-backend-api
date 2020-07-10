@@ -316,6 +316,13 @@ Flight::map('protectionPage', function ($Pagetype) {
                 $res = Flight::verifyToken($token, "mobil");
                 return $res;
             }
+        }else if($Pagetype === "logout"){
+            $verificationType = "rt";
+            $token = Flight::getTokenHeader($verificationType);
+            if (empty($token)) throw new Exception("token missing", Constante::$ERROR_CODE['401']);
+            $res = Flight::verifyToken($token, $verificationType);
+            $tokenVerif = Flight::decrypt($token, Constante::$REFRESH_ENCRYPTION_KEY);
+            return sha1($tokenVerif);
         } else {
             $verificationType = "ac";
             if ($Pagetype === "public") $verificationType = "mobil";
