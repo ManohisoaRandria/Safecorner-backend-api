@@ -445,8 +445,8 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
             } catch (Exception $e) {
                 if ($e->getCode() != 500 && $e->getCode() != 503) {
                     Flight::json(
-                        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $e->getMessage()),
-                        Constante::$ERROR_CODE['400']
+                        new ApiResponse("error", Constante::$ERROR_CODE['401'], null, $e->getMessage()),
+                        Constante::$ERROR_CODE['401']
                     );
                 } else {
                     Flight::json(
