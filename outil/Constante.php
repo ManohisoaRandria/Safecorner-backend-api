@@ -49,7 +49,7 @@ class Constante
     public static $REFRESH_ENCRYPTION_KEY = "keyBackOfficeRFTenc-api";
     public static $ACCES_TOKEN_KEY = "keyBackOfficeACT-api";
     public static $MOBILE_TOKEN_KEY = "keyFrontOfficeACT-api";
-    public static $ACCES_TOKEN_NAME = "sc-acces-token";
+    public static $ACCES_TOKEN_NAME = "sc-access-token";
     public static $MOBILE_TOKEN_NAME = "sc-mobile-token";
     public static $MOBILE_INIT = "sc-init";
     public static $REFRESH_TOKEN_NAME = "sc-refresh-token";
