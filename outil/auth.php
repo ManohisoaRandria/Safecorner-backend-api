@@ -56,7 +56,7 @@ Flight::map('logOut', function ($token, $con) {
             $rt->invalidate($con);
             return "loged out";
         } else {
-            throw new Exception("no login for this users");
+            throw new Exception("no login for this users koi");
         }
     } catch (Exception $ex) {
         throw $ex;
