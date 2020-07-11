@@ -341,11 +341,11 @@ Flight::map('protectionPage', function ($Pagetype) {
             // echo $ex->getCode();
             // Flight::stop();
            
-            Flight::halt(200,json_encode(new ApiResponse("error", $ex->getCode(), null,$ex->getMessage())));
+            Flight::halt($ex->getCode(),json_encode(new ApiResponse("error", $ex->getCode(), null,$ex->getMessage())));
         } else {
             // Flight::stop();
         
-            Flight::halt(200,json_encode(new ApiResponse("error", $ex->getCode(), null,"server error please contact api providers")));
+            Flight::halt($ex->getCode(),json_encode(new ApiResponse("error", $ex->getCode(), null,"server error please contact api providers")));
         }
         throw $ex;
     }
