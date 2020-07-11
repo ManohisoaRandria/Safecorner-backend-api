@@ -431,11 +431,12 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
                 setcookie(
                     Constante::$REFRESH_TOKEN_NAME,
                     $res[Constante::$REFRESH_TOKEN_NAME],
-                    time()+60*60*24,
-                    "/",
-                    "safe-corner-api.herokuapp.com",
-                    false,//mila hatao true refa vo depl
-                    true
+                    array('expires'=>time()+60*60*24,
+                    'path'=>"/",
+                    'domain'=>"safe-corner-api.herokuapp.com",
+                    'secure'=>false,//mila hatao true refa vo depl
+                    'httponly'=>true,
+                    'samesite' => 'None')
                 );
                 
                 Flight::json(
