@@ -435,7 +435,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
                     'path'=>"/",
                     'domain'=>"safe-corner-api.herokuapp.com",
                     'secure'=>false,//mila hatao true refa vo depl
-                    'httponly'=>true,
+                    'httponly'=>false,
                     'samesite' => 'None')
                 );
                 
