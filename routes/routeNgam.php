@@ -34,7 +34,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'user/acces-token', function (
 });
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
   Flight::getAccesControl();
-  
+
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
@@ -46,7 +46,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
       $ret = Flight::logOut($prot, Flight::db());
       //resultat
       Flight::json(
-        new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null, $ret),
+        new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null,"logged out"),
         Constante::$SUCCES_CODE['204']
       );
     } catch (Exception $e) {
