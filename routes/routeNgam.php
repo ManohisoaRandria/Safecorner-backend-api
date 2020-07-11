@@ -24,7 +24,7 @@ Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
 });
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
   
-  if(Flight::request()->method=='OPTIONS'){
+  if($_SERVER['REQUEST_METHOD']=='OPTIONS'){
     Flight::getAccesControl();
   }else{
 
