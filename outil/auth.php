@@ -321,7 +321,7 @@ Flight::map('protectionPage', function ($Pagetype) {
             $verificationType = "rt";
             $token = Flight::getTokenHeader($verificationType);
             if (empty($token)) throw new Exception("token missing", Constante::$ERROR_CODE['401']);
-            $res = Flight::verifyToken($token, $verificationType);
+            $res = Flight::verifyToken($token, $verificationType,Flight::db());
             $tokenVerif = Flight::decrypt($token, Constante::$REFRESH_ENCRYPTION_KEY);
             return sha1($tokenVerif);
         } else {
