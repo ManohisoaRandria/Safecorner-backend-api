@@ -291,7 +291,12 @@ Flight::map('getTokenHeader', function (string $type) {
 });
 //Content-Type,Connection,Accept
 Flight::map('getAccesControl', function () {
-    
+    if($_SERVER['REQUEST_METHOD']=='OPTIONS'){
+        Flight::json(
+           "OK",
+            Constante::$SUCCES_CODE['200']
+        );
+    }
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
     header('Content-Type: application/json; charset=utf-8');
@@ -335,9 +340,9 @@ Flight::map('protectionPage', function ($Pagetype) {
     } catch (Exception $ex) {
         if ($ex->getCode() != 500) {
             echo $ex->getCode();
-            Flight::halt(200, $ex->getMessage());
+            Flight::halt($ex->getCode(), $ex->getMessage());
         } else {
-            Flight::halt(200, "server error please contact api providers");
+            Flight::halt($ex->getCode(), "server error please contact api providers");
         }
         throw $ex;
     }
