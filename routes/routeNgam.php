@@ -4,6 +4,7 @@
 //back office,
 //refresh the token of the user
 Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
+  Flight::getAccesControl();
   try {
     $res = Flight::refreshAccessToken(Flight::db());
     Flight::json(
@@ -33,7 +34,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
         200
     );
   }else{
-  $prot=Flight::protectionPage("logout");
+    $prot=Flight::protectionPage("logout");
       try {
           $ret=Flight::logOut($prot,Flight::db());
           //resultat
