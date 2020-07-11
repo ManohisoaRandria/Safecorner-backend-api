@@ -294,7 +294,11 @@ Flight::map('getAccesControl', function () {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: *');
         header('Content-Type: application/json; charset=utf-8');
-        header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE');
+        header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
+        Flight::json(
+            "OK",
+             200
+         );
 });
 Flight::map('getAccesControlPublic', function () {
     header('Access-Control-Allow-Headers:*');
@@ -333,26 +337,10 @@ Flight::map('protectionPage', function ($Pagetype) {
         }
     } catch (Exception $ex) {
         if ($ex->getCode() != 500) {
-           // echo $ex->getCode();
-            if(Flight::request()->method==='OPTIONS'){
-                Flight::json(
-                    "OK",
-                     200
-                 );
-            }else{
-                Flight::halt($ex->getCode(), $ex->getMessage());
-            }
-           
+            // echo $ex->getCode();
+            Flight::halt($ex->getCode(), $ex->getMessage());
         } else {
-            if(Flight::request()->method==='OPTIONS'){
-                Flight::json(
-                    "OK",
-                     200
-                 );
-            }else{
-                Flight::halt($ex->getCode(), "server error please contact api providers");
-            }
-           
+            Flight::halt($ex->getCode(), "server error please contact api providers");
         }
         throw $ex;
     }
