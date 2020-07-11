@@ -229,7 +229,7 @@ Flight::map('verifyToken', function (string $token, string $type, PDO $con = nul
                     $rt->invalidate($con);
                     throw new Exception("refresh token invalid,you've been kicked out of server", Constante::$ERROR_CODE['401']);
                 } else {
-                    throw new Exception("no login for this users", Constante::$ERROR_CODE['400']);
+                    throw new Exception("no login for this users dd", Constante::$ERROR_CODE['400']);
                 }
             } catch (Exception $ex) {
                 throw $ex;
