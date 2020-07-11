@@ -23,7 +23,12 @@ Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
   }
 });
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
-  Flight::getAccesControl();
+  
+  if(Flight::request()->method=='OPTIONS'){
+    Flight::getAccesControl();
+  }else{
+
+  
   $prot=Flight::protectionPage("logout");
   
       try {
@@ -46,6 +51,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
       } finally {
           $con = null;
       }
+    }
 });
 
 // *************
