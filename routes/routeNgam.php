@@ -29,7 +29,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
         "ok",
         200
     );
-  }else{
+  }
 
   
   $prot=Flight::protectionPage("logout");
@@ -54,7 +54,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
       } finally {
           $con = null;
       }
-    }
+    
 });
 
 // *************
