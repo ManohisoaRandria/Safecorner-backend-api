@@ -5,7 +5,12 @@
 //refresh the token of the user
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'user/acces-token', function () {
   Flight::getAccesControl();
-
+  if($_SERVER['REQUEST_METHOD']=='OPTIONS'){
+    Flight::json(
+        "OK",
+        200
+    );
+  }else{
   try {
     $res = Flight::refreshAccessToken(Flight::db());
     Flight::json(
@@ -25,6 +30,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'user/acces-token', function (
       );
     }
   }
+}
 });
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
  
