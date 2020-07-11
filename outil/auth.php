@@ -333,12 +333,12 @@ Flight::map('protectionPage', function ($Pagetype) {
             return $res;
         }
     } catch (Exception $ex) {
-        // if ($ex->getCode() != 500) {
-        //     echo $ex->getCode();
-        //     Flight::halt($ex->getCode(), $ex->getMessage());
-        // } else {
-        //     Flight::halt($ex->getCode(), "server error please contact api providers");
-        // }
+        if ($ex->getCode() != 500) {
+            echo $ex->getCode();
+            Flight::halt($ex->getCode(), $ex->getMessage());
+        } else {
+            Flight::halt($ex->getCode(), "server error please contact api providers");
+        }
         throw $ex;
     }
 });
