@@ -291,7 +291,7 @@ Flight::map('getTokenHeader', function (string $type) {
 });
 //Content-Type,Connection,Accept
 Flight::map('getAccesControl', function () {
-    if(Flight::request()->method=='OPTIONS'){
+    if($_SERVER['REQUEST_METHOD']=='OPTIONS'){
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: *');
         header('Content-Type: application/json; charset=utf-8');
@@ -300,7 +300,13 @@ Flight::map('getAccesControl', function () {
             "OK",
              200
          );
+    }else{
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Headers: *');
+        header('Content-Type: application/json; charset=utf-8');
+        header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
     }
+   
    
 });
 Flight::map('getAccesControlPublic', function () {
