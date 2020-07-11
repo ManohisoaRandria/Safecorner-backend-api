@@ -5,6 +5,7 @@
 //refresh the token of the user
 Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
   Flight::getAccesControl();
+  
   try {
     $res = Flight::refreshAccessToken(Flight::db());
     Flight::json(

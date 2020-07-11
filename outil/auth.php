@@ -296,11 +296,7 @@ Flight::map('getAccesControl', function () {
         header('Content-Type: application/json; charset=utf-8');
         header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
 });
-Flight::before('error', function () {
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE');
-    header('Access-Control-Allow-Headers: Content-Type');
-});
+
 Flight::map('getAccesControlPublic', function () {
     header('Access-Control-Allow-Headers:*');
     header('Access-Control-Allow-Origin: *');
