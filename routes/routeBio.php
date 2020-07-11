@@ -8,6 +8,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societe', function () {
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         if (!isset($req->data->nom) || $req->data->nom == "") {
             Flight::json(
@@ -108,6 +109,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'addProtocoleChoisi', functio
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         if (!isset($req->data->idSociete) || $req->data->idSociete == "") {
             Flight::json(
@@ -178,6 +180,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieSociete', function 
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         if (!isset($req->data->description) || $req->data->description == "") {
             Flight::json(
@@ -232,6 +235,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieProtocole', functio
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         if (!isset($req->data->description) || $req->data->description == "") {
             Flight::json(
@@ -286,6 +290,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'historiqueDescente', functio
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         if (!isset($req->data->idSociete) || $req->data->idSociete == "") {
             Flight::json(
@@ -353,6 +358,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'outProtocoleSociete', functio
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         if (!isset($req->query->idSociete) || $req->query->idSociete == "") {
             Flight::json(
@@ -501,13 +507,14 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/registration', function
 });
 
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'oneSocieteDesinfection', function () {
-    Flight::getAccesControl();
+    Flight::getAccesControlPublic();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         Flight::json(
           "OK",
           200
         );
     } else {
+        Flight::protectionPage("public-private");
         $req = Flight::request();
         if (!isset($req->query->idSocieteDesinfection) || $req->query->idSocieteDesinfection == "") {
             Flight::json(
@@ -563,6 +570,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'allSociete', function () {
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         if (!isset($req->query->all) || ($req->query->all != "true" && $req->query->all != "false")) {
             Flight::json(
@@ -620,6 +628,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'allProtocole', function () {
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         if (!isset($req->query->all) || ($req->query->all != "true" && $req->query->all != "false")) {
             Flight::json(
@@ -677,6 +686,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'categorieSociete', function (
           200
         );
     } else {
+        Flight::protectionPage("public-private");
         $req = Flight::request();
         $con = Flight::db();
         try {
@@ -713,6 +723,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'categorieProtocole', function
           200
         );
     } else {
+        Flight::protectionPage("private");
         $con = Flight::db();
         try {
             //Action: prendre les categories de protocole
@@ -748,6 +759,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueChangementProtocole
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         $con = Flight::db();
         if (!isset($req->query->idSociete) || $req->query->idSociete == "") {
@@ -815,6 +827,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueChangementProtocole
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         $con = Flight::db();
         if (!isset($req->query->idSociete) || $req->query->idSociete == "") {
@@ -870,6 +883,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueDescente', function
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         $con = Flight::db();
         if (!isset($req->query->idSociete) || $req->query->idSociete == "") {
@@ -937,6 +951,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueDescenteToDay', fun
           200
         );
     } else {
+        Flight::protectionPage("private");
         $req = Flight::request();
         $con = Flight::db();
         if (!isset($req->query->idSociete) || $req->query->idSociete == "") {

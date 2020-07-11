@@ -32,6 +32,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'user/acces-token', function (
     }
   }
 });
+//logout
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
   Flight::getAccesControl();
 
@@ -68,7 +69,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
 // *************
 //initialisation token mobile, normalement indray ihany par idunique ana phone
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'mobile/init', function () {
-  Flight::getAccesControl();
+  Flight::getAccesControlPublic();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
@@ -105,6 +106,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'protocoles', function () {
       200
     );
   } else {
+    Flight::protectionPage("private");
     $req = Flight::request();
     if (!isset($req->data->nom) || $req->data->nom == "") {
       Flight::json(
@@ -163,6 +165,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function 
       200
     );
   } else {
+    Flight::protectionPage("private");
     $req = Flight::request();
     if (!isset($req->data->nom) || $req->data->nom == "") {
       Flight::json(
@@ -264,6 +267,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
       200
     );
   } else {
+    Flight::protectionPage("private");
     $req = Flight::request();
     if (!isset($req->data->prix) || $req->data->prix == "" || !is_numeric($req->data->prix)) {
       Flight::json(
@@ -319,14 +323,14 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
 // ************
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'protocoles', function () {
 
-  Flight::getAccesControl();
+  Flight::getAccesControlPublic();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
       200
     );
   } else {
-    Flight::protectionPage("public");
+    Flight::protectionPage("public-private");
     $req = Flight::request();
 
     if (!isset($req->query['societe']) || $req->query['societe'] === "") {
@@ -378,6 +382,7 @@ Flight::route('PUT|OPTIONS  ' . Constante::$BASE . 'protocoleChoisi', function (
       200
     );
   } else {
+    Flight::protectionPage("private");
     $req = Flight::request();
 
     if (!isset($req->data->societe) || $req->data->societe === "") {
@@ -437,13 +442,14 @@ Flight::route('PUT|OPTIONS  ' . Constante::$BASE . 'protocoleChoisi', function (
 //ra limit sy offset de afaka mjump amna page specifique fa ra misy  manampy tampoka no blem,mo ra bdb le donnee de lent b
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'societeDesinfect', function () {
 
-  Flight::getAccesControl();
+  Flight::getAccesControlPublic();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
       200
     );
   } else {
+    Flight::protectionPage("public-private");
     $req = Flight::request();
     if (isset($req->query['all']) || $req->query['all'] === "true") {
       try {
@@ -520,7 +526,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'societeDesinfect', function 
 
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'search', function () {
 
-  Flight::getAccesControl();
+  Flight::getAccesControlPublic();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
