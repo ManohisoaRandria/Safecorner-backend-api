@@ -333,8 +333,8 @@ Flight::map('protectionPage', function ($Pagetype) {
         }
     } catch (Exception $ex) {
         if ($ex->getCode() != 500) {
-            echo $ex->getCode();
-            if($_SERVER['REQUEST_METHOD']=='OPTIONS'){
+           // echo $ex->getCode();
+            if(Flight::request()->method==='OPTIONS'){
                 Flight::json(
                     "OK",
                      200
@@ -344,7 +344,7 @@ Flight::map('protectionPage', function ($Pagetype) {
             }
            
         } else {
-            if($_SERVER['REQUEST_METHOD']=='OPTIONS'){
+            if(Flight::request()->method==='OPTIONS'){
                 Flight::json(
                     "OK",
                      200
