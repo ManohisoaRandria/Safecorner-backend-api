@@ -2,7 +2,7 @@
 
 use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 
-Flight::map('validationNom', function(string $table,string $colone,string $value,PDO $con){
+Flight::map('validationNom', function(string $table,string $colone,$value,PDO $con){
     $res = false;
     try{
         $sql = $con->prepare("select * from ".$table." where lower(".$colone.") = lower('".$value."')",array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));

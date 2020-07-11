@@ -24,7 +24,7 @@ require 'routes/routeBio.php';
 // Flight::register('db', 'Connect', array($dbopts["host"], $dbopts["port"], ltrim($dbopts["path"], '/'), $dbopts["user"], $dbopts["pass"]));
 
 // Flight::register('db', 'Connect', array('localhost','5432','volako_db','volako_user','1234'));
-Flight::register('db', 'PDO', array('pgsql:host=localhost;port=5432;dbname=safecorner_db', 'postgres', 'm1234'), function ($db) {
+Flight::register('db', 'PDO', array('pgsql:host=localhost;port=5432;dbname=safecorner_db', 'postgres', '1234'), function ($db) {
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 });
 
