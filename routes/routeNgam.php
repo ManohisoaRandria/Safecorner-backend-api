@@ -46,7 +46,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
       $ret = Flight::logOut($prot, Flight::db());
       //resultat
       Flight::json(
-        new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null,"logged out"),
+        new ApiResponse("succes", Constante::$SUCCES_CODE['204'], "dsfsdf","logged out"),
         Constante::$SUCCES_CODE['204']
       );
     } catch (Exception $e) {
@@ -61,8 +61,6 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
           Constante::$ERROR_CODE['500']
         );
       }
-    } finally {
-      $con = null;
     }
   }
 });
