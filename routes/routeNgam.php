@@ -13,27 +13,27 @@ Flight::route('GET ' . Constante::$BASE . 'user/acces-token', function () {
   } catch (Exception $ex) {
     if ($ex->getCode() != 500) {
       Flight::json(
-        new ApiResponse("error", $ex->getCode(), null, $ex->getMessage())
+        new ApiResponse("error", $ex->getCode(), null, $ex->getMessage()),
+        $ex->getCode()
       );
     } else {
       Flight::json(
-        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error please contact api providers")
+        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error please contact api providers"),
+        Constante::$ERROR_CODE['500']
       );
     }
   }
 });
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
+ 
   Flight::getAccesControl();
   if($_SERVER['REQUEST_METHOD']=='OPTIONS'){
-      Flight::json(
-        "ok",
+    Flight::json(
+        "OK",
         200
     );
-  }
-
-  
+  }else{
   $prot=Flight::protectionPage("logout");
-  
       try {
           $ret=Flight::logOut($prot,Flight::db());
           //resultat
@@ -44,17 +44,19 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
       } catch (Exception $e) {
           if ($e->getCode() != 500 && $e->getCode() != 503) {
               Flight::json(
-                  new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $e->getMessage())
+                  new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $e->getMessage()),
+                  Constante::$ERROR_CODE['400']
               );
           } else {
               Flight::json(
-                  new ApiResponse("error", Constante::$ERROR_CODE['500'], null, $e->getMessage())
+                  new ApiResponse("error", Constante::$ERROR_CODE['500'], null, $e->getMessage()),
+                  Constante::$ERROR_CODE['500']
               );
           }
       } finally {
           $con = null;
       }
-    
+    }
 });
 
 // *************
@@ -69,11 +71,13 @@ Flight::route('GET ' . Constante::$BASE . 'mobile/init', function () {
   } catch (Exception $ex) {
     if ($ex->getCode() != 500) {
       Flight::json(
-        new ApiResponse("error", $ex->getCode(), null, $ex->getMessage())
+        new ApiResponse("error", $ex->getCode(), null, $ex->getMessage()),
+        $ex->getCode()
       );
     } else {
       Flight::json(
-        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error please contact api providers")
+        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error please contact api providers"),
+        Constante::$ERROR_CODE['500']
       );
     }
   }
@@ -84,12 +88,13 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'protocoles', function () {
   $req = Flight::request();
   if (!isset($req->data->nom) || $req->data->nom == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid nom")
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid nom"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (!isset($req->data->description) || $req->data->description == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description")
-     
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
+      Constante::$ERROR_CODE['400']
     );
   } else {
     try {
@@ -115,11 +120,13 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'protocoles', function () {
       Flight::db()->rollBack();
       if ($ex->getCode() == 400) {
         Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage())   
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+          Constante::$ERROR_CODE['400']
         );
       } else {
         Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert")
+          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
+          Constante::$ERROR_CODE['500']
         );
       }
     }
@@ -132,23 +139,28 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function 
   $req = Flight::request();
   if (!isset($req->data->nom) || $req->data->nom == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid nom") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid nom"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (!isset($req->data->description) || $req->data->description == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (!isset($req->data->lieu) || $req->data->lieu == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid lieu") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid lieu"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (!isset($req->data->email) || $req->data->email == "" || !filter_var($req->data->email, FILTER_VALIDATE_EMAIL)) {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid email") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid email"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (!isset($req->data->tel) || $req->data->tel == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid telephone number") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid telephone number"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (
     !isset($req->data->coordLat) || $req->data->coordLat == "" ||
@@ -156,7 +168,8 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function 
     !is_numeric($req->data->coordLong) || !is_numeric($req->data->coordLat)
   ) {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid coordonnee") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid coordonnee"),
+      Constante::$ERROR_CODE['400']
     );
   } else {
     try {
@@ -201,11 +214,13 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function 
       Flight::db()->rollBack();
       if ($ex->getCode() == 400) {
         Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage())
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+          Constante::$ERROR_CODE['400']
         );
       } else {
         Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert")
+          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
+          Constante::$ERROR_CODE['500']
         );
       }
     }
@@ -218,15 +233,18 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
   $req = Flight::request();
   if (!isset($req->data->prix) || $req->data->prix == "" || !is_numeric($req->data->prix)) {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid prix") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid prix"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (!isset($req->data->societe) || $req->data->societe == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "id of societe invalid") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "id of societe invalid"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (!isset($req->data->description) || $req->data->description == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
+      Constante::$ERROR_CODE['400']
     );
   } else {
     try {
@@ -249,12 +267,14 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
       Flight::db()->rollBack();
       if ($ex->getCode() == 400) {
         Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage())
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+          Constante::$ERROR_CODE['400']
         );
       } else {
 
         Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert")
+          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
+          Constante::$ERROR_CODE['500']
         );
       }
     }
@@ -269,7 +289,8 @@ Flight::route('GET ' . Constante::$BASE . 'protocoles', function () {
 
   if (!isset($req->query['societe']) || $req->query['societe'] === "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "invalid societe") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "invalid societe"),
+      Constante::$ERROR_CODE['400']
     );
   } else {
     try {
@@ -298,7 +319,8 @@ Flight::route('GET ' . Constante::$BASE . 'protocoles', function () {
     } catch (Exception $ex) {
 
       Flight::json(
-        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during getting protocole")
+        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during getting protocole"),
+        Constante::$ERROR_CODE['500']
       );
     }
   }
@@ -311,15 +333,18 @@ Flight::route('PUT ' . Constante::$BASE . 'protocoleChoisi', function () {
 
   if (!isset($req->data->societe) || $req->data->societe === "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "invalid societe") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "invalid societe"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (!isset($req->data->protocoleChoisi) || $req->data->protocoleChoisi == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "ProtocoleChoisi not found") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "ProtocoleChoisi not found"),
+      Constante::$ERROR_CODE['400']
     );
   } else if (!isset($req->data->delete) || $req->data->delete == "") {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "delete parameter not found") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "delete parameter not found"),
+      Constante::$ERROR_CODE['400']
     );
   } else {
     try {
@@ -343,12 +368,14 @@ Flight::route('PUT ' . Constante::$BASE . 'protocoleChoisi', function () {
       Flight::db()->rollBack();
       if ($ex->getCode() == 400) {
         Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage())
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+          Constante::$ERROR_CODE['400']
         );
       } else {
 
         Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert")
+          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
+          Constante::$ERROR_CODE['500']
         );
       }
     }
@@ -373,13 +400,15 @@ Flight::route('GET ' . Constante::$BASE . 'societeDesinfect', function () {
     } catch (Exception $ex) {
 
       Flight::json(
-        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during getting protocole")
+        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during getting protocole"),
+        Constante::$ERROR_CODE['500']
       );
     }
   } else if (isset($req->query['page']) && isset($req->query['count'])) {
     if (!intval($req->query['page']) || !intval($req->query['count'])) {
       Flight::json(
-        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "invalid parameter")
+        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "invalid parameter"),
+        Constante::$ERROR_CODE['400']
       );
     } else {
       $page = intval($req->query['page']);
@@ -388,7 +417,8 @@ Flight::route('GET ' . Constante::$BASE . 'societeDesinfect', function () {
       $totalPages = round($totalrow / $count);
       if ($page > $totalPages) {
         Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "there is no more pages")
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "there is no more pages"),
+          Constante::$ERROR_CODE['400']
         );
       } else {
         $offset = ($page * $count) - $count;
@@ -413,7 +443,8 @@ Flight::route('GET ' . Constante::$BASE . 'societeDesinfect', function () {
     }
   } else {
     Flight::json(
-      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "no parameter found") 
+      new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "no parameter found"),
+      Constante::$ERROR_CODE['400']
     );
   }
 });
@@ -492,12 +523,14 @@ Flight::route('GET ' . Constante::$BASE . 'search', function () {
   } catch (Exception $ex) {
     if ($ex->getCode() != 500) {
       Flight::json(
-        new ApiResponse("error", 400, null, $ex->getMessage())
+        new ApiResponse("error", 400, null, $ex->getMessage()),
+        400
       );
     } else {
 
       Flight::json(
-        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error, please contact the api provider")
+        new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error, please contact the api provider"),
+        Constante::$ERROR_CODE['500']
       );
     }
   }
