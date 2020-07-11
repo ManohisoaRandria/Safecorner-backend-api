@@ -1,3 +1,5 @@
+CREATE EXTENSION postgis;
+CREATE EXTENSION postgis_topology;
 CREATE DATABASE safecorner_db;
 CREATE TABLE users(
   id VARCHAR(50) PRIMARY KEY,

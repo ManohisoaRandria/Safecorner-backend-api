@@ -291,8 +291,9 @@ Flight::map('getTokenHeader', function (string $type) {
 });
 //Content-Type,Connection,Accept
 Flight::map('getAccesControl', function () {
-    header('Access-Control-Allow-Headers: *');
+    
     header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Headers: *');
     header('Content-Type: application/json; charset=utf-8');
     header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
 });
@@ -316,6 +317,13 @@ Flight::map('protectionPage', function ($Pagetype) {
                 $res = Flight::verifyToken($token, "mobil");
                 return $res;
             }
+        }else if($Pagetype === "logout"){
+            $verificationType = "rt";
+            $token = Flight::getTokenHeader($verificationType);
+            if (empty($token)) throw new Exception("token missing", Constante::$ERROR_CODE['401']);
+            $res = Flight::verifyToken($token, $verificationType);
+            $tokenVerif = Flight::decrypt($token, Constante::$REFRESH_ENCRYPTION_KEY);
+            return sha1($tokenVerif);
         } else {
             $verificationType = "ac";
             if ($Pagetype === "public") $verificationType = "mobil";
@@ -324,13 +332,14 @@ Flight::map('protectionPage', function ($Pagetype) {
             $res = Flight::verifyToken($token, $verificationType);
             return $res;
         }
-    } catch (\Exception $ex) {
+    } catch (Exception $ex) {
         if ($ex->getCode() != 500) {
             echo $ex->getCode();
             Flight::halt($ex->getCode(), $ex->getMessage());
         } else {
             Flight::halt($ex->getCode(), "server error please contact api providers");
         }
+        throw $ex;
     }
 });
 Flight::map('initMobileApp', function (PDO $con) {

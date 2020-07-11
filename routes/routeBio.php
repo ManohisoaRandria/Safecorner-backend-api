@@ -365,7 +365,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
                 Constante::$SUCCES_CODE['201']
             );
         } catch (Exception $e) {
-            if ($e->getCode() == 400) {
+            if ($e->getCode() != 500 && $e->getCode() != 503) {
                 Flight::json(
                     new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $e->getMessage())
                 );
@@ -560,7 +560,9 @@ Flight::route('GET ' . Constante::$BASE . 'allProtocole', function () {
 });
 
 Flight::route('GET ' . Constante::$BASE . 'categorieSociete', function () {
-    Flight::getAccesControl();
+    Flight::protectionPage("public");
+    Flight::getAccesControlPublic();
+    $req = Flight::request();
     $con = Flight::db();
     try {
         //Action: prendre les categories de societe
