@@ -243,10 +243,16 @@ Flight::map('verifyToken', function (string $token, string $type, PDO $con = nul
 });
 Flight::map('refreshAccessToken', function (PDO $con) {
     try {
-        $refreshtoken = Flight::getTokenHeader("rt");
-        if (empty($refreshtoken)) throw new Exception("refresh token not found");
-        $data = Flight::verifyToken($refreshtoken, "rt", $con);
-        //if ($data === "refresh token invalid") throw new Exception("");
+        if (empty($_COOKIE[Constante::$REFRESH_TOKEN_NAME])) throw new Exception("refresh token not found");
+        //verifiena ao am bdd aloha sode efa loged out
+        $rt = new RefreshToken("", sha1($_COOKIE[Constante::$REFRESH_TOKEN_NAME]), Constante::$REFRESH_TOKEN_VALIDE);
+        $rt = $rt->getByToken($con);
+        if ($rt == null)throw new Exception("no login for this users dd", Constante::$ERROR_CODE['400']);
+
+       
+        $data = Flight::verifyToken($_COOKIE[Constante::$REFRESH_TOKEN_NAME], "rt", $con);
+      
+        
         //eto maka anle data
         $ac = Flight::getAccesToken($data->data->id, $data->data->nom);
         return $ac;
@@ -319,10 +325,9 @@ Flight::map('protectionPage', function ($Pagetype) {
             }
         }else if($Pagetype === "logout"){
             $verificationType = "rt";
-            $token = Flight::getTokenHeader($verificationType);
-            if (empty($token)) throw new Exception("token missing", Constante::$ERROR_CODE['401']);
-            $res = Flight::verifyToken($token, $verificationType,Flight::db());
-            return $token;
+            if (empty($_COOKIE[Constante::$REFRESH_TOKEN_NAME]))  throw new Exception("token missing", Constante::$ERROR_CODE['401']);
+            $res = Flight::verifyToken($_COOKIE[Constante::$REFRESH_TOKEN_NAME], $verificationType,Flight::db());
+            return $_COOKIE[Constante::$REFRESH_TOKEN_NAME];
         } else {
             $verificationType = "ac";
             if ($Pagetype === "public") $verificationType = "mobil";
