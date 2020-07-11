@@ -338,9 +338,17 @@ Flight::map('protectionPage', function ($Pagetype) {
     } catch (Exception $ex) {
         if ($ex->getCode() != 500) {
             // echo $ex->getCode();
-            Flight::halt($ex->getCode(), $ex->getMessage());
+            Flight::stop();
+            Flight::json(
+                new ApiResponse("error", $ex->getCode(), null,$ex->getMessage())
+            );
+            // Flight::halt($ex->getCode(), $ex->getMessage());
         } else {
-            Flight::halt($ex->getCode(), "server error please contact api providers");
+            Flight::stop();
+            Flight::json(
+                new ApiResponse("error", $ex->getCode(), null,"server error please contact api providers")
+            );
+            // Flight::halt($ex->getCode(), "server error please contact api providers");
         }
         throw $ex;
     }
