@@ -292,14 +292,14 @@ Flight::map('getTokenHeader', function (string $type) {
 //Content-Type,Connection,Accept
 Flight::map('getAccesControl', function () {
     if($_SERVER['REQUEST_METHOD']=='OPTIONS'){
-        Flight::json(
-           "OK",
-            Constante::$SUCCES_CODE['200']
-        );
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: *');
         header('Content-Type: application/json; charset=utf-8');
         header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
+        Flight::json(
+            "OK",
+             200
+         );
     }
    
 });
