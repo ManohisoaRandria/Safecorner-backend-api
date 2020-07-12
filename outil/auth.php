@@ -216,29 +216,30 @@ Flight::map('verifyToken', function (string $token, string $type, PDO $con = nul
         $retour = JWT::decode($tokenVerif, $key, array('HS512'));
         return $retour;
     } catch (Exception $th) {
-        // if ($type === "rt" && $con != null) {
-        //     //raha refresh token misy blem de invalidena le any am base
-        //     try {
-        //         $con->beginTransaction();
-        //         //invalidate
-        //         //echo sha1($token);
-        //         $rt = new RefreshToken("", sha1($token), Constante::$REFRESH_TOKEN_VALIDE);
-        //         $rt = $rt->getByToken($con);
-        //         if ($rt != null) {
-        //             $rt->setEtat(Constante::$REFRESH_TOKEN_REVOKED);
-        //             $rt->invalidate($con);
-        //             throw new Exception("refresh token invalid,you've been kicked out of server", Constante::$ERROR_CODE['401']);
-        //         } else {
-        //             throw new Exception("no login for this users dd", Constante::$ERROR_CODE['400']);
-        //         }
-        //     } catch (Exception $ex) {
-        //         throw $ex;
-        //     } finally {
-        //         $con->commit();
-        //     }
-        // } else {
+        if ($type === "rt") {
+            // //raha refresh token misy blem de averina fona fa hatao logoout iny aveo
+            // try {
+            //     $con->beginTransaction();
+            //     //invalidate
+            //     //echo sha1($token);
+            //     $rt = new RefreshToken("", sha1($token), Constante::$REFRESH_TOKEN_VALIDE);
+            //     $rt = $rt->getByToken($con);
+            //     if ($rt != null) {
+            //         $rt->setEtat(Constante::$REFRESH_TOKEN_REVOKED);
+            //         $rt->invalidate($con);
+            //         throw new Exception("refresh token invalid,you've been kicked out of server", Constante::$ERROR_CODE['401']);
+            //     } else {
+            //         throw new Exception("no login for this users dd", Constante::$ERROR_CODE['400']);
+            //     }
+            // } catch (Exception $ex) {
+            //     throw $ex;
+            // } finally {
+            //     $con->commit();
+            // }
+            return 'lany fa mandeh fona';
+        } else {
             throw new Exception($th->getMessage(), Constante::$ERROR_CODE['401']);
-        // }
+        }
     }
 });
 Flight::map('refreshAccessToken', function (PDO $con) {
@@ -329,7 +330,7 @@ Flight::map('protectionPage', function ($Pagetype) {
             $token = Flight::getTokenHeader("rt");
             $verificationType = "rt";
             if (empty($token))  throw new Exception("token missing", Constante::$ERROR_CODE['401']);
-            $res = Flight::verifyToken($token, $verificationType,Flight::db());
+            $res = Flight::verifyToken($token, $verificationType);
             return $token;
         } else {
             $verificationType = "ac";
