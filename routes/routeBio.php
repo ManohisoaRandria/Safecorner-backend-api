@@ -428,19 +428,8 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
                 //Action: login
                 $res = Flight::signIn($nom, $mdp, $con);
                 //resultat
-                setcookie(
-                    Constante::$REFRESH_TOKEN_NAME,
-                    $res[Constante::$REFRESH_TOKEN_NAME],
-                    array('expires'=>time()+60*60*24,
-                    'path'=>"/",
-                    'domain'=>"safe-corner-api.herokuapp.com",
-                    'secure'=>true,//mila hatao true refa vo depl
-                    'httponly'=>true,
-                    'samesite' => 'Lax')
-                );
-                
                 Flight::json(
-                    new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res[Constante::$ACCES_TOKEN_NAME] , "Succes login"),
+                    new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes login"),
                     Constante::$SUCCES_CODE['201']
                 );
             } catch (Exception $e) {
@@ -630,7 +619,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'allSociete', function () {
         }
     }
 });
-;
+
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'allProtocole', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
