@@ -432,7 +432,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
                     Constante::$REFRESH_TOKEN_NAME,
                     $res[Constante::$REFRESH_TOKEN_NAME],
                     array('expires'=>time()+60*60*24,
-                    'path'=>"/",
+                    'path'=>"https://safe-corner-api.herokuapp.com",
                     'domain'=>"safe-corner-api.herokuapp.com",
                     'secure'=>false,//mila hatao true refa vo depl
                     'httponly'=>false,
