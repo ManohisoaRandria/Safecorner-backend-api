@@ -26,7 +26,7 @@ Flight::map('signIn', function ($nom, $mdp, PDO $con) {
         //averina izy roa
         $data = array(
             Constante::$ACCES_TOKEN_NAME => $ac,
-            Constante::$REFRESH_TOKEN_NAME =>  Flight::encrypt(Constante::$REFRESH_TOKEN_NAME.'ngamR'.$rfEnc, Constante::$REFRESH_ENCRYPTION_KEY)
+            Constante::$REFRESH_TOKEN_NAME =>  $rfEnc
         );
         return $data;
     } catch (Exception $e) {
