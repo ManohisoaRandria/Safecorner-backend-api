@@ -41,7 +41,7 @@ class Constante
     public static $MAX_LOGIN_SESSION_PER_USER = 2;
     public static $BASE = '/api/v1/';
     public static $ACCES_TOKEN_EXPIRE_TIME = 10/*5 minutes*/; //seconde
-    public static $REFRESH_TOKEN_EXPIRE_TIME = 86400 /*1  jour*/; //seconde
+    public static $REFRESH_TOKEN_EXPIRE_TIME = 20 /*1  jour*/; //seconde
     public static $REFRESH_TOKEN_VALIDE = 1;
     public static $REFRESH_TOKEN_REVOKED = 10;
     public static $SEARCH_RADIUS = 1170; //en metre avec marge 80 m
