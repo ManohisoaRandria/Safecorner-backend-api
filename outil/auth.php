@@ -297,7 +297,7 @@ Flight::map('getTokenHeader', function (string $type) {
 });
 //Content-Type,Connection,Accept
 Flight::map('getAccesControl', function () {
-        header('Access-Control-Allow-Origin: http://localhost:4200');
+        header('Access-Control-Allow-Origin: http://127.0.0.1:4200');
         header('Access-Control-Allow-Headers: sc-access-token,sc-refresh-token,Content-Type');
         header('Access-Control-Allow-Credentials: true');
         header('Content-Type: application/json; charset=utf-8');
