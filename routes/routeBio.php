@@ -434,9 +434,9 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
                     array('expires'=>time()+60*60*24,
                     'path'=>"/",
                     'domain'=>"safe-corner-api.herokuapp.com",
-                    'secure'=>false,//mila hatao true refa vo depl
+                    'secure'=>true,//mila hatao true refa vo depl
                     'httponly'=>true,
-                    'samesite' => 'None')
+                    'samesite' => 'Lax')
                 );
                 
                 Flight::json(
