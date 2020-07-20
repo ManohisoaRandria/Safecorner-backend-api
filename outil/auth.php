@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Get header Authorization
- * */
-
 use \Firebase\JWT\JWT;
 
 Flight::map('signIn', function ($nom, $mdp, PDO $con) {
