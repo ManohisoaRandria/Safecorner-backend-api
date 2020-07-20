@@ -61,6 +61,10 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societe', function () {
                 if (!is_numeric($req->data->coordLat) || !is_numeric($req->data->coordLong)) {
                     throw new Exception("Variable type latitude and longitude no numeric.", Constante::$ERROR_CODE['400']);
                 }
+                //verification de l'existance du categorie societe
+                if (!Flight::validationNom('categoriesociete', 'id', $req->data->idCategorieSociete, $con)) {
+                    throw new Exception("Categorie societe not found.", Constante::$ERROR_CODE['400']);
+                }
                 //Données
                 $id = 'SOC' . GenericDb::formatNumber(GenericDb::getNextVal("seq_protocole", $con), Constante::$ID_COUNT);
                 $idCategoriteSociete = $req->data->idCategorieSociete;
