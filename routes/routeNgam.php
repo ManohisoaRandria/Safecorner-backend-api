@@ -544,10 +544,12 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'search', function () {
       }
       //raha tsisy afats categorie
       if ((!isset($req->query['q']) || trim($req->query['q']) === "") && !isset($req->query['lat']) && !isset($req->query['lng'])) {
-        //tsy mamerina inin rahta categorie=all
+        // mamerina  ny societe rehetra ao raha categorie=all
         if ($req->query['cat'] === "all") {
+          $sql = Flight::buildSql("", $req->query['cat']);
+          $dataReturn = Flight::executeSearch($sql, Flight::db());
           Flight::json(
-            new ApiResponse("succes", Constante::$SUCCES_CODE['200'], array(), "protocoles"),
+            new ApiResponse("succes", Constante::$SUCCES_CODE['200'], $dataReturn, "protocoles"),
             Constante::$SUCCES_CODE['200']
           );
         } else {
