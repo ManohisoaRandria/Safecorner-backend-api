@@ -69,9 +69,9 @@ Flight::map('filterProtocole', function ($detailProtocole) {
                 $return[$filtername] = $temp;
             }
         } else {
-            $filtername = $detailProtocole[$i]->getDescriptioncategprotocole();
             $return[$filtername] = $temp;
-
+            $filtername = $detailProtocole[$i]->getDescriptioncategprotocole();
+            
             $temp = array();
             $temp[] = $detailProtocole[$i];
             if ($i == (count($detailProtocole) - 1)) {
@@ -122,7 +122,7 @@ Flight::map('getProtocoleBySociete', function (string $societe, string $type, PD
         } else {
             $ifData = array(
                 "idsociete" => $societe,
-                "descriptioncategprotocole" => $type,
+                "descriptioncategprotocole" => ucfirst(strtolower($type)),
                 "etat" => Constante::$PROTOCOLE_ACTIVE
             );
         }
