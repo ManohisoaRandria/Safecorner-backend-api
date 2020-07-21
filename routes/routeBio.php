@@ -369,6 +369,11 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'outProtocoleSociete', functio
                 new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "societe not found"),
                 Constante::$ERROR_CODE['400']
             );
+        }else if (!isset($req->query->idCategorieProtocole) || $req->query->idCategorieProtocole == "") {
+            Flight::json(
+                new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Categorie protocole not found"),
+                Constante::$ERROR_CODE['400']
+            );
         } else {
             $con = Flight::db();
             try {
@@ -376,10 +381,15 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'outProtocoleSociete', functio
                 if (!Flight::validationNom("societe", "id", $req->query->idSociete, $con)) {
                     throw new Exception("This societe does not exist.", Constante::$ERROR_CODE['400']);
                 }
+                //Verification: existance categorie protocole
+                if (!Flight::validationNom("categorieProtocole", "id", $req->query->idCategorieProtocole, $con)) {
+                    throw new Exception("This categorie does not exist.", Constante::$ERROR_CODE['400']);
+                }
                 //Donnee
                 $idSociete = $req->query->idSociete;
+                $idCategorieProtocole = $req->query->idCategorieProtocole;
                 //Action: prendre les protocole que le societe ne fait pas
-                $res = Flight::getOutProtocoleBySociete($idSociete, $con);
+                $res = Flight::getOutProtocoleBySociete($idSociete,$idCategorieProtocole, $con);
                 //resultat
                 Flight::json(
                     new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Succes"),
