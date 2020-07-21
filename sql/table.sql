@@ -129,15 +129,15 @@ select
   societe.coordonnee,
   -- raha sendra mbola tsisy points
   CASE
-    WHEN historiqueDescente.id != NULL THEN historiqueDescente.id
-    ELSE 'idtemp'
+    WHEN historiqueDescente.id is null THEN 'idtemp'
+    ELSE historiqueDescente.id
   END idhisto,
   CASE
     WHEN historiqueDescente.points >= 0 THEN historiqueDescente.points
     ELSE 0
   END points,
   CASE
-    WHEN historiqueDescente.dateCreation != NULL THEN historiqueDescente.dateCreation
+    WHEN historiqueDescente.dateCreation is not null THEN historiqueDescente.dateCreation
     ELSE now()
   END dateCreation
 from societe
