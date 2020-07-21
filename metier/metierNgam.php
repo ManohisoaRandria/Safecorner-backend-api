@@ -201,6 +201,7 @@ Flight::map('buildSql', function (string $q = "", string $cat, float $lat = null
     FROM ";
     $table = " societeSearch ";
     $bool = false;
+    $all = false;
     if ($lat != null && $lng != null) {
         $table = " (SELECT *,
       ST_Intersects(ST_Buffer(ST_Transform('SRID=4326;POINT(%.8f %.8f)'::geometry, 3857),%u,'quad_segs=8'),
@@ -235,12 +236,17 @@ Flight::map('buildSql', function (string $q = "", string $cat, float $lat = null
             if ($subsql == "") $subsql2 = " idcategorie='%s'";
             else $subsql2 = " and idcategorie='%s'";
             $subsql2 = sprintf($subsql2, $cat);
+        }else{
+            $all=true;
         }
     }
     if ($bool) {
         if ($subsql != "" || $subsql2 != "") $table .= " and " . $subsql . " " . $subsql2;
         else $table .= $subsql . " " . $subsql2;
-    } else $table .= " where " . $subsql . " " . $subsql2;
+    } else{
+        if($all) $table .= " " . $subsql . " " . $subsql2;
+        else $table .= " where " . $subsql . " " . $subsql2;
+    } 
     return $sql . $table . " order by points desc";
 });
 Flight::map('executeSearch', function ($sql, PDO $con) {
