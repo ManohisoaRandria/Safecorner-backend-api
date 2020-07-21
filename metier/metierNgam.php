@@ -122,7 +122,7 @@ Flight::map('getProtocoleBySociete', function (string $societe, string $type, PD
         } else {
             $ifData = array(
                 "idsociete" => $societe,
-                "lower(descriptioncategprotocole)" => strtolower($type),
+                "descriptioncategprotocole" => $type,
                 "etat" => Constante::$PROTOCOLE_ACTIVE
             );
         }
