@@ -340,10 +340,11 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'protocoles', function () {
       );
     } else {
       try {
-        $type = ""; //all,client,perso
-        if (isset($req->query['type'])) $type = $req->query['type'];
-        //client par defaut
-        if ($type === "") $type = "client";
+        $type = "";
+        //all par defaut
+        if (!isset($req->query['type']) || $req->query['type'] === "")$type = "all" ;
+        
+        else $type = $req->query['type'];
 
         $protocols = Flight::getProtocoleBySociete($req->query['societe'], $type, Flight::db());
 
