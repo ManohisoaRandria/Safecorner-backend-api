@@ -47,7 +47,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/logout', function () {
       $ret = Flight::logOut($prot, Flight::db());
       //resultat
       Flight::json(
-        new ApiResponse("succes", Constante::$SUCCES_CODE['204'], "dsfsdf","logged out"),
+        new ApiResponse("succes", Constante::$SUCCES_CODE['204'], "dsfsdf", "logged out"),
         Constante::$SUCCES_CODE['204']
       );
     } catch (Exception $e) {
@@ -230,7 +230,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function 
         );
         var_dump($societedes);
         //if there is a duplicate name
-        if (Flight::validationNom('societeDesinfection', 'nom', $nom, Flight::db()," and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+        if (Flight::validationNom('societeDesinfection', 'nom', $nom, Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
           throw new Exception("found duplicate nom", Constante::$ERROR_CODE['400']);
         } else {
           $societedes->insert(Flight::db());
@@ -286,6 +286,9 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
       );
     } else {
       try {
+        if (!Flight::validationNom('societeDesinfection', 'id', $req->data->societe, Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+          throw new Exception("societe not found, it might be deleted", Constante::$ERROR_CODE['400']);
+        }
         Flight::db()->beginTransaction();
         $id = 'PRE' . GenericDb::formatNumber(GenericDb::getNextVal("seq_prestation", Flight::db()), Constante::$ID_COUNT);
         $description = $req->data->description;
@@ -293,7 +296,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         $societe = $req->data->societe;
 
 
-        $prest = new Prestation($id, $description, $societe, $prix,Constante::$PRESTATION_ACTIVE);
+        $prest = new Prestation($id, $description, $societe, $prix, Constante::$PRESTATION_ACTIVE);
 
         $prest->insert(Flight::db());
         Flight::db()->commit();
@@ -404,18 +407,18 @@ Flight::route('PUT|OPTIONS  ' . Constante::$BASE . 'protocoleChoisi', function (
       );
     } else if (!isset($req->data->idCategorieProtocole) || $req->data->idCategorieProtocole == "") {
       Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "CategorieProtocole not found"),
-          Constante::$ERROR_CODE['400']
+        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "CategorieProtocole not found"),
+        Constante::$ERROR_CODE['400']
       );
-    }else {
+    } else {
       try {
         Flight::db()->beginTransaction();
         //si delete
         if ($req->data->delete == "true") {
-          Flight::deleteProtocoleSociete($req->data->societe, $req->data->protocoleChoisi,$req->data->idCategorieProtocole, Flight::db());
+          Flight::deleteProtocoleSociete($req->data->societe, $req->data->protocoleChoisi, $req->data->idCategorieProtocole, Flight::db());
         } else if ($req->data->delete == "false") {
           //si update
-          Flight::updateDureeProtocoleSociete($req->data->societe, $req->data->protocoleChoisi,$req->data->idCategorieProtocole, Flight::db());
+          Flight::updateDureeProtocoleSociete($req->data->societe, $req->data->protocoleChoisi, $req->data->idCategorieProtocole, Flight::db());
         } else {
           throw new Exception("delete parameter invalid", Constante::$ERROR_CODE['400']);
         }
@@ -519,7 +522,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'societeDesinfect', function 
   }
 });
 /*
-  recherche tsotra
+  recherche tsotra ana societe
   pagination:mamerina ny next,mila mi implementer cache ho anle requette
 */
 
@@ -530,7 +533,6 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'societeDesinfect', function 
 //raha tsis inin mintsy afats lat,lng de mvoka eo dol ny societe eo am manodidina
 
 //raha tena ho tsis dol reo rehetra reo fa categorie=all ihany de  tsy mamoka inin fa eo am accueil
-
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'search', function () {
 
   Flight::getAccesControlPublic();
@@ -611,6 +613,217 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'search', function () {
           new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error, please contact the api provider"),
           Constante::$ERROR_CODE['500']
         );
+      }
+    }
+  }
+});
+//get prestation by societe desinfection
+// ************
+Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'prestations', function () {
+
+  Flight::getAccesControlPublic();
+  if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    Flight::json(
+      "OK",
+      200
+    );
+  } else {
+    Flight::protectionPage("public-private");
+    $req = Flight::request();
+
+    if (!isset($req->query['societe']) || $req->query['societe'] === "") {
+      Flight::json(
+        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "invalid societe desinfection"),
+        Constante::$ERROR_CODE['400']
+      );
+    } else {
+      try {
+        if (Flight::validationNom('societeDesinfection', 'id', $req->query['societe'], Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+          throw new Exception("societeDesinfection not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
+        }
+        $prestations = GenericDb::find(
+          Prestation::class,
+          'prestation',
+          array('idSocieteDesinfection' => $req->query['societe']),
+          "",
+          Flight::db()
+        );
+
+        $societeTemp = new SocieteDesinfection($req->query['societe'], '', '', '', '', '', '', '');
+        $societeTemp = $societeTemp->getById(Flight::db());
+
+        $dataReturn = array(
+          "societeDesinfection" => $societeTemp,
+          "prestations" => $prestations
+        );
+
+        Flight::json(
+          new ApiResponse("succes", Constante::$SUCCES_CODE['200'], $dataReturn, "protocoles"),
+          Constante::$SUCCES_CODE['200']
+        );
+      } catch (Exception $ex) {
+
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during getting protocole"),
+          Constante::$ERROR_CODE['500']
+        );
+      }
+    }
+  }
+});
+//delete societe
+Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'societe', function () {
+  Flight::getAccesControl();
+  if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    Flight::json(
+      "OK",
+      200
+    );
+  } else {
+    Flight::protectionPage("private");
+    $req = Flight::request();
+    if (!isset($req->data->societe) || $req->data->societe == "") {
+      Flight::json(
+        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid id societe"),
+        Constante::$ERROR_CODE['400']
+      );
+    } else {
+      try {
+
+        if (Flight::validationNom('societe', 'id', $req->data->societe, Flight::db(), " and id not in (select idSociete from societedelete)")) {
+          throw new Exception("societe not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
+        } else {
+          Flight::db()->beginTransaction();
+          $id = 'DELS' . GenericDb::formatNumber(
+            GenericDb::getNextVal("seq_societedelete", Flight::db()),
+            Constante::$ID_COUNT
+          );
+
+          $idsociete = $req->data->societe;
+
+          $societeDelete = new SocieteDelete($id, $idsociete);
+          $societeDelete->delete(Flight::db());
+          Flight::db()->commit();
+          Flight::json(
+            new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null, "societe deleted"),
+            Constante::$SUCCES_CODE['204']
+          );
+        }
+      } catch (Exception $ex) {
+        Flight::db()->rollBack();
+        if ($ex->getCode() == 400) {
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+            Constante::$ERROR_CODE['400']
+          );
+        } else {
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
+            Constante::$ERROR_CODE['500']
+          );
+        }
+      }
+    }
+  }
+});
+//delete societedESINFECTION
+Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function () {
+  Flight::getAccesControl();
+  if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    Flight::json(
+      "OK",
+      200
+    );
+  } else {
+    Flight::protectionPage("private");
+    $req = Flight::request();
+    if (!isset($req->data->societe) || $req->data->societe == "") {
+      Flight::json(
+        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid id societeDesinfection"),
+        Constante::$ERROR_CODE['400']
+      );
+    } else {
+      try {
+
+        if (Flight::validationNom('societeDesinfection', 'id', $req->data->societe, Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+          throw new Exception("societeDesinfection not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
+        } else {
+          Flight::db()->beginTransaction();
+          $id = 'DELSD' . GenericDb::formatNumber(
+            GenericDb::getNextVal("seq_societedesinfectiondelete", Flight::db()),
+            Constante::$ID_COUNT
+          );
+
+          $idsociete = $req->data->societe;
+
+          $societeDelete = new SocieteDesinfectionDelete($id, $idsociete);
+          $societeDelete->delete(Flight::db());
+          Flight::db()->commit();
+          Flight::json(
+            new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null, "societe desinfection deleted"),
+            Constante::$SUCCES_CODE['204']
+          );
+        }
+      } catch (Exception $ex) {
+        Flight::db()->rollBack();
+        if ($ex->getCode() == 400) {
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+            Constante::$ERROR_CODE['400']
+          );
+        } else {
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
+            Constante::$ERROR_CODE['500']
+          );
+        }
+      }
+    }
+  }
+});
+//delete prestation
+Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'prestation', function () {
+  Flight::getAccesControl();
+  if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    Flight::json(
+      "OK",
+      200
+    );
+  } else {
+    Flight::protectionPage("private");
+    $req = Flight::request();
+    if (!isset($req->data->societe) || $req->data->id == "") {
+      Flight::json(
+        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid id prestation"),
+        Constante::$ERROR_CODE['400']
+      );
+    } else {
+      try {
+        Flight::db()->beginTransaction();
+        $id = $req->data->id;
+
+        $idsociete = $req->data->societe;
+
+        $prestation = new Prestation($id, '', '', '', '');
+        $prestation->delete(Flight::db());
+        Flight::db()->commit();
+        Flight::json(
+          new ApiResponse("succes", Constante::$SUCCES_CODE['204'], null, "prestation deleted"),
+          Constante::$SUCCES_CODE['204']
+        );
+      } catch (Exception $ex) {
+        Flight::db()->rollBack();
+        if ($ex->getCode() == 400) {
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+            Constante::$ERROR_CODE['400']
+          );
+        } else {
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
+            Constante::$ERROR_CODE['500']
+          );
+        }
       }
     }
   }

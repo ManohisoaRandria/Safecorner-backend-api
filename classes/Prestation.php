@@ -34,15 +34,17 @@ class Prestation implements JsonSerializable
             throw $ex;
         }
     }
-    public function getById(PDO $con)
+    public function delete(PDO $con)
     {
         try {
-            $Prestation = GenericDb::find(Prestation::class, "prestation", array("id" => $this->id), "", $con);
-            return $Prestation;
+            GenericDb::update("prestation",array(
+                "etat"=>Constante::$PRESTATION_NON_ACTIVE,
+            )," id='".$this->id."'",false,$con);
         } catch (Exception $ex) {
             throw $ex;
         }
     }
+ 
     public function jsonSerialize()
     {
         return [
