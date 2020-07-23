@@ -6,3 +6,5 @@ require 'classes/ProtocoleDetail.php';
 require 'classes/Prestation.php';
 require 'classes/SocieteDesinfection.php';
 require 'classes/SocieteAffiche.php';
+require 'classes/SocieteDelete.php';
+require 'classes/SocieteDesinfectionDelete.php';

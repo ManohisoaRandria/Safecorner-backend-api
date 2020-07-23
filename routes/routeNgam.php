@@ -679,7 +679,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'prestations', function () {
   }
 });
 //delete societe
-Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSociete', function () {
+Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'societe', function () {
   Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
@@ -689,7 +689,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSociete', function () {
   } else {
     Flight::protectionPage("private");
     $req = Flight::request();
-    if (!isset($req->data->id) || $req->data->id == "") {
+    if (!isset($req->query['id']) || $req->query['id'] == "") {
       Flight::json(
         new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid id societe"),
         Constante::$ERROR_CODE['400']
@@ -697,7 +697,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSociete', function () {
     } else {
       try {
 
-        if (!Flight::validationNom('societe', 'id', $req->data->id, Flight::db(), " and id not in (select idSociete from societedelete)")) {
+        if (!Flight::validationNom('societe', 'id', $req->query['id'], Flight::db(), " and id not in (select idSociete from societedelete)")) {
           throw new Exception("societe not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
         } else {
           Flight::db()->beginTransaction();
@@ -706,7 +706,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSociete', function () {
             Constante::$ID_COUNT
           );
 
-          $idsociete = $req->data->id;
+          $idsociete = $req->query['id'];
 
           $societeDelete = new SocieteDelete($id, $idsociete);
           $societeDelete->delete(Flight::db());
@@ -734,7 +734,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSociete', function () {
   }
 });
 //delete societedESINFECTION
-Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSocieteDesinfect', function () {
+Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function () {
   Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
@@ -744,7 +744,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSocieteDesinfect', functio
   } else {
     Flight::protectionPage("private");
     $req = Flight::request();
-    if (!isset($req->data->id) || $req->data->id == "") {
+    if (!isset($req->query['id']) || $req->query['id'] == "") {
       Flight::json(
         new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid id societeDesinfection"),
         Constante::$ERROR_CODE['400']
@@ -752,7 +752,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSocieteDesinfect', functio
     } else {
       try {
 
-        if (!Flight::validationNom('societeDesinfection', 'id', $req->data->id, Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+        if (!Flight::validationNom('societeDesinfection', 'id', $req->query['id'], Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
           throw new Exception("societeDesinfection not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
         } else {
           Flight::db()->beginTransaction();
@@ -761,7 +761,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSocieteDesinfect', functio
             Constante::$ID_COUNT
           );
 
-          $idsociete = $req->data->id;
+          $idsociete = $req->query['id'];
 
           $societeDelete = new SocieteDesinfectionDelete($id, $idsociete);
           $societeDelete->delete(Flight::db());
@@ -789,7 +789,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delSocieteDesinfect', functio
   }
 });
 //delete prestation
-Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delPrestation', function () {
+Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'prestation', function () {
   Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
@@ -799,7 +799,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delPrestation', function () {
   } else {
     Flight::protectionPage("private");
     $req = Flight::request();
-    if (!isset($req->data->id) || $req->data->id == "") {
+    if (!isset($req->query['id']) || $req->query['id'] == "") {
       Flight::json(
         new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid id prestation"),
         Constante::$ERROR_CODE['400']
@@ -807,7 +807,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'delPrestation', function () {
     } else {
       try {
         Flight::db()->beginTransaction();
-        $id = $req->data->id;
+        $id = $req->query['id'];
 
         $prestation = new Prestation($id, '', '', '', '');
         $prestation->delete(Flight::db());
