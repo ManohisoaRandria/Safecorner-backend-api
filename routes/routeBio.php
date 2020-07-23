@@ -306,7 +306,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'historiqueDescente', functio
                 new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
                 Constante::$ERROR_CODE['400']
             );
-        } else if (!isset($req->data->nombreProtocole) || $req->data->nombreProtocole == "") {
+        } else if (!isset($req->data->nombreProtocole) ||!is_numeric( $req->data->nombreProtocole )) {
             Flight::json(
                 new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Number of protocols not found"),
                 Constante::$ERROR_CODE['400']
