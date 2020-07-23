@@ -50,11 +50,11 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societe', function () {
             try {
                 $con->beginTransaction();
                 //Verification existance de nom
-                if (Flight::validationNom('societe', 'nom', $req->data->nom, $con)) {
+                if (Flight::validationNom('societe', 'nom', $req->data->nom, $con," and id not in (select idSociete from societedelete)")) {
                     throw new Exception("This name already exists.", Constante::$ERROR_CODE['400']);
                 }
                 //Verification existance de email
-                if (Flight::validationNom('societe', 'email', $req->data->email, $con)) {
+                if (Flight::validationNom('societe', 'email', $req->data->email, $con," and id not in (select idSociete from societedelete)")) {
                     throw new Exception("This email already exists.", Constante::$ERROR_CODE['400']);
                 }
                 //verification type variable lat et long
@@ -316,7 +316,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'historiqueDescente', functio
             try {
                 $con->beginTransaction();
                 //Verification: existance Societe
-                if (!Flight::validationNom("societe", "id", $req->data->idSociete," and id not in (select idSociete from societedelete)",$con)) {
+                if (!Flight::validationNom("societe", "id", $req->data->idSociete,$con," and id not in (select idSociete from societedelete)")) {
                     throw new Exception("This societe does not exist.", Constante::$ERROR_CODE['400']);
                 }
                 //Donnees
@@ -378,7 +378,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'outProtocoleSociete', functio
             $con = Flight::db();
             try {
                 //Verification: existance Societe
-                if (!Flight::validationNom("societe", "id", $req->query->idSociete," and id not in (select idSociete from societedelete)",$con)) {
+                if (!Flight::validationNom("societe", "id", $req->query->idSociete,$con," and id not in (select idSociete from societedelete)")) {
                     throw new Exception("This societe does not exist.", Constante::$ERROR_CODE['400']);
                 }
                 //Verification: existance categorie protocole
@@ -539,7 +539,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'oneSocieteDesinfection', func
             $con = Flight::db();
             try {
                 //Vaerification: existance societe
-                if (!Flight::validationNom("societedesinfection", "id", $req->query->idSocieteDesinfection," and id not in (select idSocieteDesinfection from societedesinfectiondelete)",$con)) {
+                if (!Flight::validationNom("societedesinfection", "id", $req->query->idSocieteDesinfection,$con," and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
                     throw new Exception("Societe desinfection not exists.", Constante::$ERROR_CODE['400']);
                 }
                 //Donnee
@@ -794,7 +794,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueChangementProtocole
         } else {
             try {
                 //Vaerification: existance societe
-                if (!Flight::validationNom("societe", "id", $req->query->idSociete," and id not in (select idSociete from societedelete)",$con)) {
+                if (!Flight::validationNom("societe", "id", $req->query->idSociete,$con," and id not in (select idSociete from societedelete)")) {
                     throw new Exception("Societe not exists.", Constante::$ERROR_CODE['400']);
                 }
                 //Donnee
@@ -852,7 +852,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueChangementProtocole
         } else {
             try {
                 //Vaerification: existance societe
-                if (!Flight::validationNom("societe", "id", $req->query->idSociete," and id not in (select idSociete from societedelete)", $con)) {
+                if (!Flight::validationNom("societe", "id", $req->query->idSociete, $con," and id not in (select idSociete from societedelete)")) {
                     throw new Exception("Societe not exists.", Constante::$ERROR_CODE['400']);
                 }
                 //Donnee
@@ -918,7 +918,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueDescente', function
         } else {
             try {
                 //Vaerification: existance societe
-                if (!Flight::validationNom("societe", "id", $req->query->idSociete," and id not in (select idSociete from societedelete)", $con)) {
+                if (!Flight::validationNom("societe", "id", $req->query->idSociete, $con," and id not in (select idSociete from societedelete)")) {
                     throw new Exception("Societe not exists.", Constante::$ERROR_CODE['400']);
                 }
                 //Donnee
@@ -976,7 +976,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueDescenteToDay', fun
         } else {
             try {
                 //Vaerification: existance societe
-                if (!Flight::validationNom("societe", "id", $req->query->idSociete," and id not in (select idSociete from societedelete)", $con)) {
+                if (!Flight::validationNom("societe", "id", $req->query->idSociete, $con," and id not in (select idSociete from societedelete)")) {
                     throw new Exception("Societe not exists.", Constante::$ERROR_CODE['400']);
                 }
                 //Donnee
@@ -1063,7 +1063,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societe', function () {
             try {
                 $con->beginTransaction();
                 //Verification existance de nom
-                if (!Flight::validationNom('societe', 'id', $req->data->nom, $con)) {
+                if (!Flight::validationNom('societe', 'id', $req->data->nom, $con," and id not in (select idSociete from societedelete)")) {
                     throw new Exception("societe not found.", Constante::$ERROR_CODE['400']);
                 }
                 //verification type variable lat et long

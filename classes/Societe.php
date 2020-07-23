@@ -283,14 +283,16 @@ class Societe implements JsonSerializable
         }
     }
     //update societe
-    public function update($coord = false,PDO $con){
+    public function update(PDO $con,$coord = false){
         try{
             if($coord){
                 $sql = "UPDATE societe SET nom=?,idcategoriesociete=?,description=?,lieu=?,email=?,tel=?,coordonnee=ST_GeomFromText(?) where id = ?";
-            $result = $con->prepare($sql);
-            $result->execute([$this->getNom(), $this->getIdCategorieSociete(), $this->getDescription(), $this->getLieu(), $this->getEmail(), $this->getTel(), $this->getCoordonnee(),$this->getId()]);
+                $result = $con->prepare($sql);
+                $result->execute([$this->getNom(), $this->getIdCategorieSociete(), $this->getDescription(), $this->getLieu(), $this->getEmail(), $this->getTel(), $this->getCoordonnee(),$this->getId()]);
             }else{
-
+                $sql = "UPDATE societe SET nom=?,idcategoriesociete=?,description=?,lieu=?,email=?,tel=? where id = ?";
+                $result = $con->prepare($sql);
+                $result->execute([$this->getNom(), $this->getIdCategorieSociete(), $this->getDescription(), $this->getLieu(), $this->getEmail(), $this->getTel(),$this->getId()]);
             }
         }catch(Exception $e){
             throw $e;
