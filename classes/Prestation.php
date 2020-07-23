@@ -52,6 +52,7 @@ class Prestation implements JsonSerializable
     {
         return [
             'id' => $this->id,
+            'nom'=> $this->nom,
             'description' => $this->description,
             'idSocieteDesinfection' => $this->idSocieteDesinfection,
             'prix' => $this->prix
