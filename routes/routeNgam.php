@@ -293,7 +293,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         $societe = $req->data->societe;
 
 
-        $prest = new Prestation($id, $description, $societe, $prix);
+        $prest = new Prestation($id, $description, $societe, $prix,Constante::$PRESTATION_ACTIVE);
 
         $prest->insert(Flight::db());
         Flight::db()->commit();

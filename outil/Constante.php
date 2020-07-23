@@ -33,6 +33,8 @@ class Constante
     public static $ID_COUNT = 4;
     public static $PROTOCOLE_ACTIVE = 1;
     public static $PROTOCOLE_NON_ACTIVE = 10;
+    public static $PRESTATION_ACTIVE = 1;
+    public static $PRESTATION_NON_ACTIVE = 10;
     public static $DESCENTE_VALIDE = 1;
     public static $DESCENTE_ANNULER = 10;
     public static $HISTORIQUE_PROTOCOLE_ADD = 1;
