@@ -1237,7 +1237,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         200
       );
     } else {
-      Flight::protectionPage("private");
+    //   Flight::protectionPage("private");
       $req = Flight::request();
       if (!isset($req->data->id) || $req->data->id == "") {
         Flight::json(
@@ -1273,7 +1273,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
             throw new Exception("Prestation not found.", Constante::$ERROR_CODE['400']);
           }
           //Verification existance de idSociete
-          if (Flight::validationNom('societedesinfection', 'idsocietedesinfection', $req->data->idSocieteDesinfection, $con," and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+          if (!Flight::validationNom('societedesinfection', 'id', $req->data->idSocieteDesinfection, $con," and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
             throw new Exception("Societe desinfection not found.", Constante::$ERROR_CODE['400']);
           }
           $id = $req->data->id;
