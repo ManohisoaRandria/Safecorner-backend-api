@@ -141,9 +141,13 @@ Flight::map('deleteProtocoleChoisi', function($societe,$idCategorieProtocole,$da
         $societe = $societe->getById($con);
         $nbProtocoleSociete = $societe->getCountProtocole($con);
         //action: calcule la note
-        $note = 10*$nombreCheck/$nbProtocoleSociete;
-        //resultat
-        $res = round($note,2);
+        if($nombreCheck==0)$res =0;
+        else{
+            $note = 10*$nombreCheck/$nbProtocoleSociete;
+            //resultat
+            $res = round($note,2);
+        }
+        
     }
     catch(Exception $e){
         throw $e;
