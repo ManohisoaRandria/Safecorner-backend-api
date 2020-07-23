@@ -1264,7 +1264,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         try {
           $con->beginTransaction();
           //Verification existance de id
-          if (!Flight::validationNom('prestation','id',$req->data->id,$con," and etat ='1'")) {
+          if (!Flight::validationNom('prestation','id',$req->data->id,$con," and etat ='".Constante::$PRESTATION_ACTIVE."'")) {
             throw new Exception("Prestation not found.", Constante::$ERROR_CODE['400']);
           }
           //Verification existance de idSociete
@@ -1275,7 +1275,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
           $description = $req->data->description;
           $prix = $req->data->prix;
           $societe = $req->data->idSocieteDesinfection;
-          $prest = new Prestation($id, $description, $societe, $prix,1);
+          $prest = new Prestation($id, $description, $societe, $prix,Constante::$PRESTATION_ACTIVE);
   
           $prest->update($con);
           $con->commit();
