@@ -1249,7 +1249,12 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
           new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid prix"),
           Constante::$ERROR_CODE['400']
         );
-      } else if (!isset($req->data->idSocieteDesinfection) || $req->data->idSocieteDesinfection == "") {
+      } else if (!isset($req->data->nom) || $req->data->nom == "") {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "nom invalid"),
+          Constante::$ERROR_CODE['400']
+        );
+      }else if (!isset($req->data->idSocieteDesinfection) || $req->data->idSocieteDesinfection == "") {
         Flight::json(
           new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "id of societe invalid"),
           Constante::$ERROR_CODE['400']
@@ -1275,7 +1280,8 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
           $description = $req->data->description;
           $prix = $req->data->prix;
           $societe = $req->data->idSocieteDesinfection;
-          $prest = new Prestation($id, $description, $societe, $prix,Constante::$PRESTATION_ACTIVE);
+          $nom = $req->data->nom;
+          $prest = new Prestation($id,$nom ,$description, $societe, $prix,Constante::$PRESTATION_ACTIVE);
   
           $prest->update($con);
           $con->commit();

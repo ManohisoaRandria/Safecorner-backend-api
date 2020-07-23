@@ -85,6 +85,7 @@ CREATE TABLE societeDesinfection(
 CREATE SEQUENCE seq_societeDesinfection;
 CREATE TABLE prestation(
   id VARCHAR(50) PRIMARY KEY,
+  nom VARCHAR(60),
   description Text,
   prix Decimal(10, 2),
   idSocieteDesinfection VARCHAR(50) REFERENCES societeDesinfection,

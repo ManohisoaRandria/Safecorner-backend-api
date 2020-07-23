@@ -279,6 +279,11 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "id of societe invalid"),
         Constante::$ERROR_CODE['400']
       );
+    } else if (!isset($req->data->nom) || $req->data->nom == "") {
+      Flight::json(
+        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "nom invalid"),
+        Constante::$ERROR_CODE['400']
+      );
     } else if (!isset($req->data->description) || $req->data->description == "") {
       Flight::json(
         new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
@@ -294,9 +299,9 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         $description = $req->data->description;
         $prix = $req->data->prix;
         $societe = $req->data->societe;
+        $nom = $req->data->nom;
 
-
-        $prest = new Prestation($id, $description, $societe, $prix, Constante::$PRESTATION_ACTIVE);
+        $prest = new Prestation($id, $nom,$description, $societe, $prix, Constante::$PRESTATION_ACTIVE);
 
         $prest->insert(Flight::db());
         Flight::db()->commit();
@@ -662,11 +667,18 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'prestations', function () {
           Constante::$SUCCES_CODE['200']
         );
       } catch (Exception $ex) {
+        if ($ex->getCode() == 400) {
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+            Constante::$ERROR_CODE['400']
+          );
+        } else {
 
-        Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during getting protocole"),
-          Constante::$ERROR_CODE['500']
-        );
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during getting prestations"),
+            Constante::$ERROR_CODE['500']
+          );
+        }
       }
     }
   }
@@ -802,7 +814,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         Flight::db()->beginTransaction();
         $id = $req->query['id'];
 
-        $prestation = new Prestation($id, '', '', '', '');
+        $prestation = new Prestation($id,'','', '', '', '');
         $prestation->delete(Flight::db());
         Flight::db()->commit();
         Flight::json(
