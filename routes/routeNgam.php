@@ -1,6 +1,15 @@
 <?php
 
+Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'testa', function () {
+  Flight::getAccesControlPublic();
 
+  Flight::json(
+    array(
+      "now"=>new DateTime(),
+      "nowAfrica"=>new DateTime("now",new DateTimeZone('Africa/Nairobi'))
+    )
+);
+});
 //back office,
 //refresh the token of the user
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'user/acces-token', function () {
@@ -301,7 +310,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         $societe = $req->data->societe;
         $nom = $req->data->nom;
 
-        $prest = new Prestation($id, $nom,$description, $societe, $prix, Constante::$PRESTATION_ACTIVE);
+        $prest = new Prestation($id, $nom, $description, $societe, $prix, Constante::$PRESTATION_ACTIVE);
 
         $prest->insert(Flight::db());
         Flight::db()->commit();
@@ -814,7 +823,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         Flight::db()->beginTransaction();
         $id = $req->query['id'];
 
-        $prestation = new Prestation($id,'','', '', '', '');
+        $prestation = new Prestation($id, '', '', '', '', '');
         $prestation->delete(Flight::db());
         Flight::db()->commit();
         Flight::json(
