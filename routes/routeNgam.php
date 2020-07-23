@@ -1,6 +1,15 @@
 <?php
 
+Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'testa', function () {
+  Flight::getAccesControlPublic();
 
+  Flight::json(
+    array(
+      "now"=>new DateTime(),
+      "nowAfrica"=>new DateTime("now",new DateTimeZone('Africa/Nairobi'))
+    )
+);
+});
 //back office,
 //refresh the token of the user
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'user/acces-token', function () {
@@ -124,7 +133,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'protocoles', function () {
         $id = 'PRT' . GenericDb::formatNumber(GenericDb::getNextVal("seq_protocole", Flight::db()), Constante::$ID_COUNT);
         $description = $req->data->description;
         $nom = $req->data->nom;
-        $date = new DateTime();
+        $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
 
         $protocole = new Protocole($id, $nom, $description, $date);
         //if there is a duplicate name
@@ -216,7 +225,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function 
         $tel = $req->data->tel;
         $coordonnee = 'SRID=4326;POINT(%.8f %.8f)';
         $coordonnee = sprintf($coordonnee, $req->data->coordLat, $req->data->coordLong);
-        $date = new DateTime();
+        $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
 
         $societedes = new SocieteDesinfection(
           $id,
@@ -301,7 +310,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         $societe = $req->data->societe;
         $nom = $req->data->nom;
 
-        $prest = new Prestation($id, $nom,$description, $societe, $prix, Constante::$PRESTATION_ACTIVE);
+        $prest = new Prestation($id, $nom, $description, $societe, $prix, Constante::$PRESTATION_ACTIVE);
 
         $prest->insert(Flight::db());
         Flight::db()->commit();
@@ -814,7 +823,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         Flight::db()->beginTransaction();
         $id = $req->query['id'];
 
-        $prestation = new Prestation($id,'','', '', '', '');
+        $prestation = new Prestation($id, '', '', '', '', '');
         $prestation->delete(Flight::db());
         Flight::db()->commit();
         Flight::json(

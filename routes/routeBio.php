@@ -75,7 +75,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societe', function () {
                 $tel = $req->data->tel;
                 $coordonnee = 'SRID=4326;POINT(%.8f %.8f)';
                 $coordonnee = sprintf($coordonnee, $req->data->coordLat, $req->data->coordLong);
-                $date = new DateTime();
+                $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
                 $res = new Societe($id, $nom, $idCategoriteSociete, $description, $lieu, $date, $email, $tel, $coordonnee);
                 //insertion
                 $res->insert($con);
@@ -324,7 +324,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'historiqueDescente', functio
                 $idSociete = $req->data->idSociete;
                 $description = $req->data->description;
                 $points = Flight::calculePoint($idSociete, $req->data->nombreProtocole, $con);
-                $date = new DateTime();
+                $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
                 //Insertion 
                 $res = new HistoriqueDescente($id, $idSociete, $description, $points, $date, Constante::$DESCENTE_VALIDE);
                 $res->insert($con);

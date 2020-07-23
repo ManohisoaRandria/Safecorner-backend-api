@@ -59,7 +59,7 @@ Flight::map('logOut', function ($token, $con) {
     }
 });
 Flight::map('getToken', function (string $iduser) {
-    $date = new DateTime();
+    $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
     date_add($date, date_interval_create_from_date_string('2 minutes'));
     $token = "%s%s";
     $token = sprintf($token, $date->format("Y-m-d H:i:s"), $iduser);
@@ -111,7 +111,7 @@ Flight::map('decrypt', function (string $encString, string $encryption_key) {
 });
 Flight::map('getAccesToken', function (string $iduser, string $name) {
     $secretKey = Constante::$ACCES_TOKEN_KEY;
-    $date = new DateTime();
+    $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
     date_add($date, date_interval_create_from_date_string('1 minutes'));
     $id = "access-%s";
     $token = sprintf($id, $date->format("Y-m-d H:i:s"));
@@ -141,7 +141,7 @@ Flight::map('getAccesToken', function (string $iduser, string $name) {
 });
 Flight::map('getRefreshToken', function (string $iduser, string $name) {
     $secretKey = Constante::$REFRESH_TOKEN_KEY;
-    $date = new DateTime();
+    $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
     date_add($date, date_interval_create_from_date_string('1 minutes'));
     $id = "refresh-%s";
     $token = sprintf($id, $date->format("Y-m-d H:i:s"));
@@ -172,7 +172,7 @@ Flight::map('getRefreshToken', function (string $iduser, string $name) {
 //token for mobile users,endeless token, indray mgenerer ihany
 Flight::map('getMobileToken', function (string $uniqueMobileId) {
     $secretKey = Constante::$MOBILE_TOKEN_KEY;
-    $date = new DateTime();
+    $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
     date_add($date, date_interval_create_from_date_string('1 minutes'));
     $id = "mobile-%s";
     $token = sprintf($id, $date->format("Y-m-d H:i:s"));
