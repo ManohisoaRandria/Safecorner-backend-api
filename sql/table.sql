@@ -87,7 +87,8 @@ CREATE TABLE prestation(
   id VARCHAR(50) PRIMARY KEY,
   description Text,
   prix Decimal(10, 2),
-  idSocieteDesinfection VARCHAR(50) REFERENCES societeDesinfection
+  idSocieteDesinfection VARCHAR(50) REFERENCES societeDesinfection,
+  etat integer
 );
 CREATE SEQUENCE seq_prestation;
 CREATE TABLE societeDelete(

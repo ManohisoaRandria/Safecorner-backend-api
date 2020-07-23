@@ -1,5 +1,5 @@
 <?php
-
+// insert Societe
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societe', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -104,7 +104,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societe', function () {
         }
     }
 });
-
+// ajout protocole societe
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'addProtocoleChoisi', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -175,7 +175,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'addProtocoleChoisi', functio
         }
       }
 });
-
+// insert categorie societe
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieSociete', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -230,7 +230,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieSociete', function 
         }
     }
 });
-
+// insert categorie protocole
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieProtocole', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -285,7 +285,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieProtocole', functio
         }
     }
 });
-
+// insert historique descente
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'historiqueDescente', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -353,7 +353,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'historiqueDescente', functio
         }
     }
 });
-
+// get maka an ze protocole tsy ao amin'ilay Societe
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'outProtocoleSociete', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -413,7 +413,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'outProtocoleSociete', functio
         }
     }
 });
-
+// login
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -464,7 +464,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/login', function () {
         }
     }
 });
-
+// inscription
 Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/registration', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -519,7 +519,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/registration', function
         }
     }
 });
-
+// get maka societeDesinfection iray misraka amin'ny prestationany
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'oneSocieteDesinfection', function () {
     Flight::getAccesControlPublic();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -575,7 +575,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'oneSocieteDesinfection', func
         }
     }
 });
-
+// get maka an societe rehetra misy pagination
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'allSociete', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -633,7 +633,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'allSociete', function () {
         }
     }
 });
-
+// get maka an protocole rehetra misy pagination
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'allProtocole', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -691,7 +691,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'allProtocole', function () {
         }
     }
 });
-
+// get categorie societe
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'categorieSociete', function () {
     Flight::getAccesControlPublic();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -728,7 +728,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'categorieSociete', function (
         }
     }
 });
-
+// get categorie protocole
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'categorieProtocole', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -764,7 +764,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'categorieProtocole', function
         }
     }
 });
-
+// get maka historique an le changement an le protocole
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueChangementProtocole', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -832,7 +832,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueChangementProtocole
         }
     }
 });
-
+// get maka historique an le changement an le protocole androany
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueChangementProtocoleToDay', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -888,7 +888,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueChangementProtocole
         }
     }
 });
-
+// get maka historique an le descente
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueDescente', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -956,7 +956,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueDescente', function
         }
     }
 });
-
+// get maka historique an le descente androany
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueDescenteToDay', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -1012,7 +1012,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'historiqueDescenteToDay', fun
         }
     }
 });
-
+// update societe
 Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societe', function () {
     Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
