@@ -1025,10 +1025,10 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societe', function () {
         $req = Flight::request();
         if (!isset($req->data->id) || $req->data->id == "") {
             Flight::json(
-                new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "societe not found"),
+                new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Societe not found"),
                 Constante::$ERROR_CODE['400']
             );
-        }else if (!isset($req->data->nom) || $req->data->nom == "") {
+        } else if (!isset($req->data->nom) || $req->data->nom == "") {
             Flight::json(
                 new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid nom"),
                 Constante::$ERROR_CODE['400']
@@ -1053,6 +1053,11 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societe', function () {
                 new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid telephone number"),
                 Constante::$ERROR_CODE['400']
             );
+        } else if (!isset($req->data->coordLat) || $req->data->coordLat == "" || !isset($req->data->coordLong) || $req->data->coordLong == "") {
+            Flight::json(
+                new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid coordonnee"),
+                Constante::$ERROR_CODE['400']
+            );
         } else if (!isset($req->data->idCategorieSociete) || $req->data->idCategorieSociete == "") {
             Flight::json(
                 new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Categorie not found"),
@@ -1062,17 +1067,21 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societe', function () {
             $con = Flight::db();
             try {
                 $con->beginTransaction();
+                //Verification existance de id
+                if (!Flight::validationNom('societe', 'id', $req->data->id, $con," and id not in (select idSociete from societedelete)")) {
+                    throw new Exception("Societe not found.", Constante::$ERROR_CODE['400']);
+                }
                 //Verification existance de nom
-                if (!Flight::validationNom('societe', 'id', $req->data->nom, $con," and id not in (select idSociete from societedelete)")) {
-                    throw new Exception("societe not found.", Constante::$ERROR_CODE['400']);
+                if (Flight::validationNom('societe', 'nom', $req->data->nom, $con," and id != '".$req->data->id."' and id not in (select idSociete from societedelete)")) {
+                    throw new Exception("This name already taken.", Constante::$ERROR_CODE['400']);
+                }
+                //Verification existance de email
+                if (Flight::validationNom('societe', 'email', $req->data->email, $con," and id != '".$req->data->id."' and id not in (select idSociete from societedelete)")) {
+                    throw new Exception("This email already taken.", Constante::$ERROR_CODE['400']);
                 }
                 //verification type variable lat et long
-                if(isset($req->data->coordLat) && isset($req->data->coordLong)){
-                    if (!is_numeric($req->data->coordLat) || !is_numeric($req->data->coordLong)) {
-                        throw new Exception("Variable type latitude and longitude no numeric.", Constante::$ERROR_CODE['400']);
-                    }
-                }else{
-                    throw new Exception("Invalid coordonnee.", Constante::$ERROR_CODE['400']);
+                if (!is_numeric($req->data->coordLat) || !is_numeric($req->data->coordLong)) {
+                    throw new Exception("Variable type latitude and longitude no numeric.", Constante::$ERROR_CODE['400']);
                 }
                 //verification de l'existance du categorie societe
                 if (!Flight::validationNom('categoriesociete', 'id', $req->data->idCategorieSociete, $con)) {
@@ -1090,16 +1099,11 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societe', function () {
                 $coordonnee = sprintf($coordonnee, $req->data->coordLat, $req->data->coordLong);
                 $res = new Societe($id, $nom, $idCategoriteSociete, $description, $lieu,null, $email, $tel, $coordonnee);
                 //insertion
-                //si les coord son 0 0 on ne change pas les coord
-                if($req->data->coordLat == 0 && $req->data->coordLong == 0){
-
-                }else{
-
-                }
+                $res->update($con);
                 $con->commit();
 
                 Flight::json(
-                    new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Societe inserted"),
+                    new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $res, "Updated societe"),
                     Constante::$SUCCES_CODE['201']
                 );
             } catch (Exception $e) {
@@ -1119,5 +1123,181 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societe', function () {
                 $con = null;
             }
         }
+    }
+});
+//update societe desinfection
+Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function () {
+    Flight::getAccesControl();
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+      Flight::json(
+        "OK",
+        200
+      );
+    } else {
+      Flight::protectionPage("private");
+      $req = Flight::request();
+      if (!isset($req->data->id) || $req->data->id == "") {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Societe desinfection not found"),
+          Constante::$ERROR_CODE['400']
+        );
+      }else if (!isset($req->data->nom) || $req->data->nom == "") {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid nom"),
+          Constante::$ERROR_CODE['400']
+        );
+      } else if (!isset($req->data->description) || $req->data->description == "") {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
+          Constante::$ERROR_CODE['400']
+        );
+      } else if (!isset($req->data->lieu) || $req->data->lieu == "") {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid lieu"),
+          Constante::$ERROR_CODE['400']
+        );
+      } else if (!isset($req->data->email) || $req->data->email == "" || !filter_var($req->data->email, FILTER_VALIDATE_EMAIL)) {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid email"),
+          Constante::$ERROR_CODE['400']
+        );
+      } else if (!isset($req->data->tel) || $req->data->tel == "") {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid telephone number"),
+          Constante::$ERROR_CODE['400']
+        );
+      } else if (
+        !isset($req->data->coordLat) || $req->data->coordLat == "" ||
+        !isset($req->data->coordLong) || $req->data->coordLong == "" ||
+        !is_numeric($req->data->coordLong) || !is_numeric($req->data->coordLat)
+      ) {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid coordonnee"),
+          Constante::$ERROR_CODE['400']
+        );
+      } else {
+        $con = Flight::db();
+        try {
+         $con->beginTransaction();
+          $id = $req->data->id;
+          $nom = $req->data->nom;
+          $email = $req->data->email;
+          $lieu = $req->data->lieu;
+          $description = $req->data->description;
+          $tel = $req->data->tel;
+          $coordonnee = 'SRID=4326;POINT(%.8f %.8f)';
+          $coordonnee = sprintf($coordonnee, $req->data->coordLat, $req->data->coordLong);
+  
+          $societedes = new SocieteDesinfection(
+            $id,
+            $nom,
+            $description,
+            $email,
+            $tel,
+            $lieu,
+            null,
+            $coordonnee
+          );
+          //if there is a duplicate name
+          if (!Flight::validationNom('societeDesinfection', 'id',$id, $con," and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+            throw new Exception("Societe desinfection not found.", Constante::$ERROR_CODE['400']);
+          } else if (Flight::validationNom('societeDesinfection', 'nom', $nom, $con,"  and id != '".$id."' and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+            throw new Exception("found duplicate nom", Constante::$ERROR_CODE['400']);
+          } else {
+            $societedes->update($con);
+            $con->commit();
+            Flight::json(
+              new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $societedes, "Updated societe de desinfection"),
+              Constante::$SUCCES_CODE['201']
+            );
+          }
+        } catch (Exception $ex) {
+          $con->rollBack();
+          if ($ex->getCode() == 400) {
+            Flight::json(
+              new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+              Constante::$ERROR_CODE['400']
+            );
+          } else {
+            Flight::json(
+              new ApiResponse("error", Constante::$ERROR_CODE['500'], null, $ex->getMessage()),
+              Constante::$ERROR_CODE['500']
+            );
+          }
+        }
+      }
+    }
+});
+//Update prestation
+Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
+    Flight::getAccesControl();
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+      Flight::json(
+        "OK",
+        200
+      );
+    } else {
+      Flight::protectionPage("private");
+      $req = Flight::request();
+      if (!isset($req->data->id) || $req->data->id == "") {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Prestation not found."),
+          Constante::$ERROR_CODE['400']
+        );
+      } else if (!isset($req->data->prix) || $req->data->prix == "" || !is_numeric($req->data->prix)) {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid prix"),
+          Constante::$ERROR_CODE['400']
+        );
+      } else if (!isset($req->data->idSocieteDesinfection) || $req->data->idSocieteDesinfection == "") {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "id of societe invalid"),
+          Constante::$ERROR_CODE['400']
+        );
+      } else if (!isset($req->data->description) || $req->data->description == "") {
+        Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "Invalid description"),
+          Constante::$ERROR_CODE['400']
+        );
+      } else {
+        $con = Flight::db();
+        try {
+          $con->beginTransaction();
+          //Verification existance de id
+          if (!Flight::validationNom('prestation','id',$req->data->id,$con," and etat ='".Constante::$PRESTATION_ACTIVE."'")) {
+            throw new Exception("Prestation not found.", Constante::$ERROR_CODE['400']);
+          }
+          //Verification existance de idSociete
+          if (Flight::validationNom('societedesinfection', 'idsocietedesinfection', $req->data->idSocieteDesinfection, $con," and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+            throw new Exception("Societe desinfection not found.", Constante::$ERROR_CODE['400']);
+          }
+          $id = $req->data->id;
+          $description = $req->data->description;
+          $prix = $req->data->prix;
+          $societe = $req->data->idSocieteDesinfection;
+          $prest = new Prestation($id, $description, $societe, $prix,Constante::$PRESTATION_ACTIVE);
+  
+          $prest->update($con);
+          $con->commit();
+          Flight::json(
+            new ApiResponse("succes", Constante::$SUCCES_CODE['201'], $prest, "prestaiton for societe:" . $societe . " updated"),
+            Constante::$SUCCES_CODE['201']
+          );
+        } catch (Exception $ex) {
+            $con->rollBack();
+          if ($ex->getCode() == 400) {
+            Flight::json(
+              new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+              Constante::$ERROR_CODE['400']
+            );
+          } else {
+  
+            Flight::json(
+              new ApiResponse("error", Constante::$ERROR_CODE['500'], null,$ex->getMessage()),
+              Constante::$ERROR_CODE['500']
+            );
+          }
+        }
+      }
     }
 });
