@@ -638,7 +638,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'prestations', function () {
       );
     } else {
       try {
-        if (Flight::validationNom('societeDesinfection', 'id', $req->query['societe'], Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+        if (!Flight::validationNom('societeDesinfection', 'id', $req->query['societe'], Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
           throw new Exception("societeDesinfection not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
         }
         $prestations = GenericDb::find(
