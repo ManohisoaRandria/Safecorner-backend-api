@@ -16,7 +16,7 @@ Flight::map('getIdProtocoleChoisi', function ($societe, $idprotocole, PDO $con) 
         throw $ex;
     }
 });
-Flight::map('deleteProtocoleSociete', function ($societe, $data, PDO $con) {
+Flight::map('deleteProtocoleSociete', function ($societe, $data,$idcategProt, PDO $con) {
     try {
         $id = "";
         for ($i = 0; $i < Count($data); $i++) {
@@ -24,7 +24,7 @@ Flight::map('deleteProtocoleSociete', function ($societe, $data, PDO $con) {
             GenericDb::update(
                 "protocolechoisi",
                 array("etat" => Constante::$PROTOCOLE_NON_ACTIVE),
-                " idsociete='" . $societe . "' and idprotocole='" . $data[$i]['idProtocole'] . "' ",
+                " idsociete='" . $societe . "' and idprotocole='" . $data[$i]['idProtocole'] . "' and idcategorieprotocole='".$idcategProt."' ",
                 false,
                 $con
             );
@@ -39,13 +39,13 @@ Flight::map('deleteProtocoleSociete', function ($societe, $data, PDO $con) {
         throw $e;
     }
 });
-Flight::map('updateDureeProtocoleSociete', function ($societe, $data, PDO $con) {
+Flight::map('updateDureeProtocoleSociete', function ($societe, $data,$idcategProt, PDO $con) {
     try {
         for ($i = 0; $i < Count($data); $i++) {
             GenericDb::update(
                 "protocolechoisi",
                 array("duree" => $data[$i]['duree']),
-                " idsociete='" . $societe . "' and idprotocole='" . $data[$i]['idProtocole'] . "' ",
+                " idsociete='" . $societe . "' and idprotocole='" . $data[$i]['idProtocole'] . "' and idcategorieprotocole='".$idcategProt."' ",
                 false,
                 $con
             );
@@ -122,7 +122,7 @@ Flight::map('getProtocoleBySociete', function (string $societe, string $type, PD
         } else {
             $ifData = array(
                 "idsociete" => $societe,
-                "descriptioncategprotocole" => ucfirst(strtolower($type)),
+                "idcategorieprotocole" => $type,
                 "etat" => Constante::$PROTOCOLE_ACTIVE
             );
         }

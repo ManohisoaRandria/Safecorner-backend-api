@@ -338,12 +338,14 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'protocoles', function () {
         new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "invalid societe"),
         Constante::$ERROR_CODE['400']
       );
+    } else if (!isset($req->query['type']) || $req->query['type'] === "") {
+      Flight::json(
+        new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "invalid type"),
+        Constante::$ERROR_CODE['400']
+      );
     } else {
       try {
-        $type = ""; //all,client,perso
-        if (isset($req->query['type'])) $type = $req->query['type'];
-        //client par defaut
-        if ($type === "") $type = "client";
+        $type = $req->query['type'];
 
         $protocols = Flight::getProtocoleBySociete($req->query['societe'], $type, Flight::db());
 
@@ -400,15 +402,20 @@ Flight::route('PUT|OPTIONS  ' . Constante::$BASE . 'protocoleChoisi', function (
         new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "delete parameter not found"),
         Constante::$ERROR_CODE['400']
       );
-    } else {
+    } else if (!isset($req->data->idCategorieProtocole) || $req->data->idCategorieProtocole == "") {
+      Flight::json(
+          new ApiResponse("error", Constante::$ERROR_CODE['400'], null, "CategorieProtocole not found"),
+          Constante::$ERROR_CODE['400']
+      );
+    }else {
       try {
         Flight::db()->beginTransaction();
         //si delete
         if ($req->data->delete == "true") {
-          Flight::deleteProtocoleSociete($req->data->societe, $req->data->protocoleChoisi, Flight::db());
+          Flight::deleteProtocoleSociete($req->data->societe, $req->data->protocoleChoisi,$req->data->idCategorieProtocole, Flight::db());
         } else if ($req->data->delete == "false") {
           //si update
-          Flight::updateDureeProtocoleSociete($req->data->societe, $req->data->protocoleChoisi, Flight::db());
+          Flight::updateDureeProtocoleSociete($req->data->societe, $req->data->protocoleChoisi,$req->data->idCategorieProtocole, Flight::db());
         } else {
           throw new Exception("delete parameter invalid", Constante::$ERROR_CODE['400']);
         }
