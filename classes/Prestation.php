@@ -2,14 +2,16 @@
 class Prestation implements JsonSerializable
 {
     private $id;
+    private $nom;
     private $description;
     private $idSocieteDesinfection;
     private $prix;
     private $etat;
 
-    function __construct($id, $description, $idSocieteDesinfection, $prix,$etat)
+    function __construct($id,$nom, $description, $idSocieteDesinfection, $prix,$etat)
     {
         $this->setId($id);
+        $this->setNom($nom);
         $this->setDescription($description);
         $this->setIdSocieteDesinfection($idSocieteDesinfection);
         $this->setPrix($prix);
@@ -28,7 +30,8 @@ class Prestation implements JsonSerializable
         try {
             GenericDb::update("prestation",array(
                 "description"=>$this->description,
-                "prix"=>$this->prix
+                "prix"=>$this->prix,
+                "nom"=>$this->nom
             )," id='".$this->id."'",false,$con);
         } catch (Exception $ex) {
             throw $ex;
@@ -152,5 +155,17 @@ class Prestation implements JsonSerializable
     public function setEtat($etat)
     {
         $this->etat = $etat;
+    }
+
+   
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
     }
 }
