@@ -230,7 +230,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function 
         );
         var_dump($societedes);
         //if there is a duplicate name
-        if (Flight::validationNom('societeDesinfection', 'nom', $nom," and id not in (select idSocieteDesinfection from societedesinfectiondelete)", Flight::db())) {
+        if (Flight::validationNom('societeDesinfection', 'nom', $nom, Flight::db()," and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
           throw new Exception("found duplicate nom", Constante::$ERROR_CODE['400']);
         } else {
           $societedes->insert(Flight::db());
