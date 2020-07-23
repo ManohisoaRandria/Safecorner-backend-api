@@ -638,7 +638,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'prestations', function () {
       );
     } else {
       try {
-        if (!Flight::validationNom('societeDesinfection', 'id', $req->query['societe'], Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+        if (Flight::validationNom('societeDesinfection', 'id', $req->query['societe'], Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
           throw new Exception("societeDesinfection not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
         }
         $prestations = GenericDb::find(
@@ -690,7 +690,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'societe', function () {
     } else {
       try {
 
-        if (!Flight::validationNom('societe', 'id', $req->data->societe, Flight::db(), " and id not in (select idSociete from societedelete)")) {
+        if (Flight::validationNom('societe', 'id', $req->data->societe, Flight::db(), " and id not in (select idSociete from societedelete)")) {
           throw new Exception("societe not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
         } else {
           Flight::db()->beginTransaction();
@@ -745,7 +745,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'societeDesinfect', functio
     } else {
       try {
 
-        if (!Flight::validationNom('societeDesinfection', 'id', $req->data->societe, Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
+        if (Flight::validationNom('societeDesinfection', 'id', $req->data->societe, Flight::db(), " and id not in (select idSocieteDesinfection from societedesinfectiondelete)")) {
           throw new Exception("societeDesinfection not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
         } else {
           Flight::db()->beginTransaction();
