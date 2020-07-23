@@ -460,7 +460,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'societeDesinfect', function 
     $req = Flight::request();
     if (isset($req->query['all']) || $req->query['all'] === "true") {
       try {
-        $data = Flight::getAllSocieteDesinfection("", Flight::db());
+        $data = Flight::getAllSocieteDesinfection(" where id not in (select idSocieteDesinfection from societedesinfectiondelete)", Flight::db());
 
         Flight::json(
           new ApiResponse("succes", Constante::$SUCCES_CODE['200'], $data, "société de desinfection"),
@@ -482,7 +482,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'societeDesinfect', function 
       } else {
         $page = intval($req->query['page']);
         $count = intval($req->query['count']);
-        $totalrow = Flight::Count("societeDesinfection", "", Flight::db());
+        $totalrow = Flight::Count("societeDesinfection", " id not in (select idSocieteDesinfection from societedesinfectiondelete)", Flight::db());
         $totalPages = round($totalrow / $count);
         if ($page > $totalPages) {
           Flight::json(

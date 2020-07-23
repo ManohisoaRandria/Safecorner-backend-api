@@ -118,13 +118,14 @@ Flight::map('getProtocoleBySociete', function (string $societe, string $type, PD
                 "idsociete" => $societe,
                 "etat" => Constante::$PROTOCOLE_ACTIVE
             );
-            $aprewhere = " order by descriptioncategprotocole";
+            $aprewhere = " and idsociete not in (select idSociete from societeDelete) order by descriptioncategprotocole";
         } else {
             $ifData = array(
                 "idsociete" => $societe,
                 "idcategorieprotocole" => $type,
                 "etat" => Constante::$PROTOCOLE_ACTIVE
             );
+            $aprewhere=" and idsociete not in (select idSociete from societeDelete)";
         }
         $detailProtocole = GenericDb::find(
             ProtocoleDetail::class,
@@ -241,11 +242,11 @@ Flight::map('buildSql', function (string $q = "", string $cat, float $lat = null
         }
     }
     if ($bool) {
-        if ($subsql != "" || $subsql2 != "") $table .= " and " . $subsql . " " . $subsql2;
-        else $table .= $subsql . " " . $subsql2;
+        if ($subsql != "" || $subsql2 != "") $table .= " and " . $subsql . " " . $subsql2 ." and id not in (select idSociete from societeDelete) ";
+        else $table .= " and id not in (select idSociete from societeDelete) ";
     } else{
-        if($all) $table .= " " . $subsql . " " . $subsql2;
-        else $table .= " where " . $subsql . " " . $subsql2;
+        if($subsql != "" || $subsql2 != "") $table .= " where " . $subsql . " " . $subsql2." and id not in (select idSociete from societeDelete) ";
+        else $table .= " where id not in (select idSociete from societeDelete) ";
     } 
     return $sql . $table . " order by points desc";
 });

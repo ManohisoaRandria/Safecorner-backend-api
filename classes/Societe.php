@@ -31,7 +31,8 @@ class Societe implements JsonSerializable
         try {
             $societe = null;
             $sql = "SELECT id,nom,idCategoriesociete,description,lieu,dateCreation,email,tel,
-                ST_AsGeoJSON(coordonnee) as coordonnee FROM societe where id = '%s' ";
+                ST_AsGeoJSON(coordonnee) as coordonnee FROM societe where id = '%s' 
+                and id not in (select idSociete from societeDelete)";
             $sql = sprintf($sql, $this->id);
 
             $res = $con->query($sql);
