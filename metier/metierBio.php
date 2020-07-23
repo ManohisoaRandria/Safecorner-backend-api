@@ -30,7 +30,7 @@ Flight::map('addProtocoleChoisi', function($societe,$idCategorieProtocole,$data,
             $idSociete = $societe->getId();
             $description = "Initialisation de point de la societe";
             $points = 10.00;
-            $date = new DateTime();
+            $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
             //Insertion 
             $res = new HistoriqueDescente($idHistoD,$idSociete,$description,$points,$date,Constante::$DESCENTE_VALIDE);
             $res->insert($con);
@@ -46,7 +46,7 @@ Flight::map('addProtocoleChoisi', function($societe,$idCategorieProtocole,$data,
                         //insertion HistoriqueChangementProtocole
                         $historiqueChangementProtocole = new HistoriqueChangementProtocole(
                             $id,
-                            new DateTime(),
+                            new DateTime("now",new DateTimeZone('Africa/Nairobi')),
                             Constante::$HISTORIQUE_PROTOCOLE_ADD);
                         $historiqueChangementProtocole->insert($con);    
                     }
@@ -65,14 +65,14 @@ Flight::map('addProtocoleChoisi', function($societe,$idCategorieProtocole,$data,
                     $societe->getId(),
                     $idCategorieProtocole,
                     $data[$i]['idProtocole'],
-                    new DateTime(),
+                    new DateTime("now",new DateTimeZone('Africa/Nairobi')),
                     $data[$i]['duree'],
                     Constante::$PROTOCOLE_ACTIVE);
                 $protocoleChoisi->insert($con);
                 //insertion HistoriqueChangementProtocole
                 $historiqueChangementProtocole = new HistoriqueChangementProtocole(
                     $id,
-                    new DateTime(),
+                    new DateTime("now",new DateTimeZone('Africa/Nairobi')),
                     1);
                 $historiqueChangementProtocole->insert($con);
             }
@@ -105,7 +105,7 @@ Flight::map('deleteProtocoleChoisi', function($societe,$idCategorieProtocole,$da
                 //insert HistoriqueChangementProtocole
                 $historiqueChangementProtocole = new HistoriqueChangementProtocole(
                     $id,
-                    new DateTime(),
+                    new DateTime("now",new DateTimeZone('Africa/Nairobi')),
                     10);
                 $historiqueChangementProtocole->insert($con);
             }

@@ -30,7 +30,7 @@ Flight::map('deleteProtocoleSociete', function ($societe, $data,$idcategProt, PD
             );
             $historiqueChangementProtocole = new HistoriqueChangementProtocole(
                 $id,
-                new DateTime(),
+                new DateTime("now",new DateTimeZone('Africa/Nairobi')),
                 Constante::$HISTORIQUE_PROTOCOLE_DELETE
             );
             $historiqueChangementProtocole->insert($con);

@@ -337,7 +337,7 @@ class Societe implements JsonSerializable
             if ($this->id == "" || $this->id == null) {
                 throw new Exception("Societe not found.", Constante::$ERROR_CODE['400']);
             }
-            $nowDate = new DateTime();
+            $nowDate = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
             $nowString = $nowDate->format('Y-m-d');
             $afterWhere = " where idsociete='%s' and 
                 datechangement >= '%s 00:00:00' and 
@@ -431,7 +431,7 @@ class Societe implements JsonSerializable
             if ($this->id == "" || $this->id == null) {
                 throw new Exception("Societe not found.", Constante::$ERROR_CODE['400']);
             }
-            $nowDate = new DateTime();
+            $nowDate = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
             $nowString = $nowDate->format('Y-m-d');
             $afterWhere = " where idsociete='%s' and 
                 datecreation >= '%s 00:00:00' and 

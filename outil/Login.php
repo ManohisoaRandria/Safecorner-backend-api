@@ -54,7 +54,7 @@
 //   }
 //   public function getToken()
 //   {
-//     $date = new DateTime();
+//     $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
 //     date_add($date, date_interval_create_from_date_string('2 minutes'));
 //     $token="%s%s";
 //     $token=sprintf($token,$date->format("Y-m-d H:i:s"),$this->userData->nom);
