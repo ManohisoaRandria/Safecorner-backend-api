@@ -41,6 +41,20 @@ class SocieteDesinfection implements JsonSerializable
             throw $e;
         }
     }
+    //update societe desinfection
+    public function update(PDO $con)
+    {
+        try {
+            $sql = "UPDATE SocieteDesinfection SET nom=?,description=?,email=?,tel=?,lieu=?,coordonnee=ST_GeomFromText(?) where id=? ";
+            $result = $con->prepare($sql);
+            $result->execute([
+                 $this->getNom(), $this->getDescription(),
+                $this->getEmail(), $this->getTel(), $this->getLieu(), $this->getCoordonnee(),$this->getId()
+            ]);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
     public function getPrestation(PDO $con)
     {
         try {

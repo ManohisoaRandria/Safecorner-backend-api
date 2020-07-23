@@ -21,6 +21,17 @@ class Prestation implements JsonSerializable
             throw $ex;
         }
     }
+    public function update(PDO $con)
+    {
+        try {
+            GenericDb::update("prestation",array(
+                "description"=>$this->description,
+                "prix"=>$this->prix
+            )," id='".$this->id."'",false,$con);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
     public function getById(PDO $con)
     {
         try {

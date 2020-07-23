@@ -90,6 +90,16 @@ CREATE TABLE prestation(
   idSocieteDesinfection VARCHAR(50) REFERENCES societeDesinfection
 );
 CREATE SEQUENCE seq_prestation;
+CREATE TABLE societeDelete(
+  id VARCHAR(50) PRIMARY KEY,
+  idSociete VARCHAR(50) REFERENCES societe
+);
+CREATE SEQUENCE seq_societedelete;
+CREATE TABLE societeDesinfectionDelete(
+  id VARCHAR(50) PRIMARY KEY,
+  idSocieteDesinfection VARCHAR(50) REFERENCES societeDesinfection
+);
+CREATE SEQUENCE seq_societedesinfectiondelete;
 create view protocoleDetail as
 select
   protocoleChoisi.*,
