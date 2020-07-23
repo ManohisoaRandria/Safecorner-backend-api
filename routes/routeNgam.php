@@ -662,11 +662,18 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'prestations', function () {
           Constante::$SUCCES_CODE['200']
         );
       } catch (Exception $ex) {
+        if ($ex->getCode() == 400) {
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+            Constante::$ERROR_CODE['400']
+          );
+        } else {
 
-        Flight::json(
-          new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during getting protocole"),
-          Constante::$ERROR_CODE['500']
-        );
+          Flight::json(
+            new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during getting prestations"),
+            Constante::$ERROR_CODE['500']
+          );
+        }
       }
     }
   }
