@@ -658,7 +658,10 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'prestations', function () {
         $prestations = GenericDb::find(
           Prestation::class,
           'prestation',
-          array('idSocieteDesinfection' => $req->query['societe']),
+          array(
+            'idSocieteDesinfection' => $req->query['societe'],
+            'etat'=>Constante::$PRESTATION_ACTIVE
+        ),
           "",
           Flight::db()
         );
