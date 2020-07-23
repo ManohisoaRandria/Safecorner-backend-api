@@ -5,13 +5,15 @@ class Prestation implements JsonSerializable
     private $description;
     private $idSocieteDesinfection;
     private $prix;
+    private $etat;
 
-    function __construct($id, $description, $idSocieteDesinfection, $prix)
+    function __construct($id, $description, $idSocieteDesinfection, $prix,$etat)
     {
         $this->setId($id);
         $this->setDescription($description);
         $this->setIdSocieteDesinfection($idSocieteDesinfection);
         $this->setPrix($prix);
+        $this->setEtat($etat);
     }
     public function insert(PDO $con)
     {
@@ -126,5 +128,27 @@ class Prestation implements JsonSerializable
     public function setPrix($prix)
     {
         $this->prix = $prix;
+    }
+
+    /**
+     * Get the value of etat
+     *
+     * @return  mixed
+     */
+    public function getEtat()
+    {
+        return $this->etat;
+    }
+
+    /**
+     * Set the value of etat
+     *
+     * @param   mixed  $etat  
+     *
+     * @return  self
+     */
+    public function setEtat($etat)
+    {
+        $this->etat = $etat;
     }
 }
