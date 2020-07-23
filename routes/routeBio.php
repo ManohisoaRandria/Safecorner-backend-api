@@ -1237,7 +1237,7 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
         200
       );
     } else {
-    //   Flight::protectionPage("private");
+      Flight::protectionPage("private");
       $req = Flight::request();
       if (!isset($req->data->id) || $req->data->id == "") {
         Flight::json(
