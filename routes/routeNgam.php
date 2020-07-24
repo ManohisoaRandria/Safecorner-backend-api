@@ -1020,10 +1020,11 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'protocole', function () {
             Constante::$ERROR_CODE['400']
           );
         } else {
-          Flight::json(
-            new ApiResponse("error", Constante::$ERROR_CODE['500'], null,$ex->getMessage()),
-            Constante::$ERROR_CODE['500']
-          );
+          // Flight::json(
+          //   new ApiResponse("error", Constante::$ERROR_CODE['500'], null,$ex->getMessage()),
+          //   Constante::$ERROR_CODE['500']
+          // );
+          echo $ex;
         }
       }
     }
@@ -1047,6 +1048,8 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'categorieSociete', functio
       );
     } else {
       try {
+         //delete
+         Flight::db()->beginTransaction();
         //Verification existance de id
         if (Flight::validationNom('categorieSociete','id',$req->data->query['id'],Flight::db()," and id in(select idCategorieSociete from categorieSocieteDelete)")) {
           throw new Exception("categorie societe not found, it might have been deleted", Constante::$ERROR_CODE['400']);
@@ -1061,8 +1064,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'categorieSociete', functio
             Constante::$SUCCES_CODE['400']
           );
         }else{
-          //delete
-          Flight::db()->beginTransaction();
+         
          
           $idprot = $req->query['id'];
 
