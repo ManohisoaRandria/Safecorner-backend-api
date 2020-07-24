@@ -188,7 +188,10 @@ Flight::map('getAllSocieteDesinfection', function (string $where, PDO $con) {
 });
 Flight::map('verifyIfProtocoleMiasa', function (string $id, PDO $con) {
     try {
-        $sql = "select societe.* from societe join (select distinct(idsociete) as soc from protocolechoisi where idprotocole='"+$id+"' and etat='"+Constante::$PRESTATION_ACTIVE+"') as tab on tab.soc=societe.id";
+        $sql = "select societe.* from societe join (select distinct(idsociete) as soc from protocolechoisi where 
+            idprotocole='".$id."' and etat='".Constante::$PRESTATION_ACTIVE."')
+            as tab on tab.soc=societe.id";
+       
         $ret = array();
         $res = $con->query($sql);
         $res->setFetchMode(PDO::FETCH_ASSOC);
