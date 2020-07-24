@@ -985,6 +985,8 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'protocole', function () {
       );
     } else {
       try {
+        //delete
+        Flight::db()->beginTransaction();
         if (Flight::validationNom('protocole', 'id', $req->query['id'], Flight::db(), " and id in (select idprotocole from protocoleDelete)")) {
           throw new Exception("protocole not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
         } 
@@ -997,8 +999,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'protocole', function () {
             Constante::$SUCCES_CODE['400']
           );
         }else{
-          //delete
-          Flight::db()->beginTransaction();
+          
          
           $idprot = $req->query['id'];
 
