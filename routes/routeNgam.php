@@ -1054,7 +1054,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'categorieSociete', functio
           throw new Exception("categorie societe not found, it might have been deleted", Constante::$ERROR_CODE['400']);
         }
         //verification hoe mbola misy societe manana an iny protocole iny ve
-        $verif= GenericDb::find(CategorieSociete::class, "societe",
+        $verif= GenericDb::find(Societe::class, "societe",
         array("idcategoriesociete"=>$req->query['id'])," and idcategoriesociete not in(select idCategorieSociete from categorieSocieteDelete)",Flight::db());
         if(count($verif)!=0){
           Flight::json(
