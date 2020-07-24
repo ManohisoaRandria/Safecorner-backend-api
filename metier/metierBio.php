@@ -122,7 +122,7 @@ Flight::map('deleteProtocoleChoisi', function($societe,$idCategorieProtocole,$da
         $temp = new Protocole(null,null,null,null);
         $afterWhere = " where id not in (select idprotocole from protocolechoisi where idsociete='%s' 
                         and idcategorieprotocole='%s' and etat = '%s' and 
-                        idprotocole not in(select idProtocole from protocleDelete))";
+                        idprotocole not in(select idProtocole from protocoleDelete))";
         $afterWhere = sprintf($afterWhere,$idSociete,$idCategorieProtocole,Constante::$PROTOCOLE_ACTIVE);
         return GenericDb::find($temp,'protocole',array(),$afterWhere,$con);
      }
