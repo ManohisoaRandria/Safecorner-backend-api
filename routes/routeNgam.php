@@ -691,7 +691,7 @@ Flight::route('PUT|OPTIONS  ' . Constante::$BASE . 'protocoleChoisi', function (
   }
 });
 //Update protocole
-Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
+Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'protocole', function () {
   Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
