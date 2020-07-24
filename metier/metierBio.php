@@ -225,7 +225,7 @@ Flight::map('getAllProtocole',function(int $page/*num page*/,int $limitProtocole
     $protocoles = array();
     try{
         ///requette principale
-        $sql = "SELECT * FROM protocole where id not in(select idProtocole from protocleDelete)";
+        $sql = "SELECT * FROM protocole where id not in(select idProtocole from protocoleDelete)";
         if($all == "false"){
             //controlle valeur
             if(!is_numeric($page)||$page === 0){
