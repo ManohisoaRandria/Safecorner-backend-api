@@ -1050,12 +1050,12 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'categorieSociete', functio
          //delete
          Flight::db()->beginTransaction();
         //Verification existance de id
-        if (Flight::validationNom('categorieSociete','id',$req->data->query['id'],Flight::db()," and id in(select idCategorieSociete from categorieSocieteDelete)")) {
+        if (Flight::validationNom('categorieSociete','id',$req->query['id'],Flight::db()," and id in(select idCategorieSociete from categorieSocieteDelete)")) {
           throw new Exception("categorie societe not found, it might have been deleted", Constante::$ERROR_CODE['400']);
         }
         //verification hoe mbola misy societe manana an iny protocole iny ve
         $verif= GenericDb::find(CategorieSociete::class, "societe",
-        array("idcategoriesociete"=>$req->data->query['id'])," and idcategoriesociete not in(select idCategorieSociete from categorieSocieteDelete)",Flight::db());
+        array("idcategoriesociete"=>$req->query['id'])," and idcategoriesociete not in(select idCategorieSociete from categorieSocieteDelete)",Flight::db());
         if(count($verif)!=0){
           Flight::json(
             new ApiResponse("error", Constante::$ERROR_CODE['400'], $verif, "You have to remove this categorie societe 
