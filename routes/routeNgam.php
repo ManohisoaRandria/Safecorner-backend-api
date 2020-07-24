@@ -1020,7 +1020,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'protocole', function () {
           );
         } else {
           Flight::json(
-            new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
+            new ApiResponse("error", Constante::$ERROR_CODE['500'], null,$ex->getMessage()),
             Constante::$ERROR_CODE['500']
           );
         }
