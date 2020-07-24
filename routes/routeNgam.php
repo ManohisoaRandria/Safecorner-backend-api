@@ -1084,10 +1084,11 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'categorieSociete', functio
             Constante::$ERROR_CODE['400']
           );
         } else {
-          Flight::json(
-            new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
-            Constante::$ERROR_CODE['500']
-          );
+          // Flight::json(
+          //   new ApiResponse("error", Constante::$ERROR_CODE['500'], null, "server error during insert"),
+          //   Constante::$ERROR_CODE['500']
+          // );
+          echo $ex;
         }
       }
     }
