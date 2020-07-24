@@ -1020,10 +1020,11 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'protocole', function () {
             Constante::$ERROR_CODE['400']
           );
         } else {
-          Flight::json(
-            new ApiResponse("error", Constante::$ERROR_CODE['500'], null,"server error, p^lease contact api provider"),
-            Constante::$ERROR_CODE['500']
-          );
+          // Flight::json(
+          //   new ApiResponse("error", Constante::$ERROR_CODE['500'], null,"server error, please contact api provider"),
+          //   Constante::$ERROR_CODE['500']
+          // );
+          echo $ex;
         }
       }
     }
