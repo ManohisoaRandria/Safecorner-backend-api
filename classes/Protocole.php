@@ -39,6 +39,17 @@ class Protocole implements JsonSerializable
             throw $ex;
         }
     }
+    public function update(PDO $con)
+    {
+        try {
+            GenericDb::update("protocole",array(
+                "description"=>$this->description,
+                "nom"=>$this->nom
+            )," id='".$this->id."'",false,$con);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
     /**
      * Get the value of id
      *

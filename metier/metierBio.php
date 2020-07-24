@@ -120,7 +120,9 @@ Flight::map('deleteProtocoleChoisi', function($societe,$idCategorieProtocole,$da
  Flight::map('getOutProtocoleBySociete', function($idSociete,$idCategorieProtocole,PDO $con){
      try{
         $temp = new Protocole(null,null,null,null);
-        $afterWhere = " where id not in (select idprotocole from protocolechoisi where idsociete='%s' and idcategorieprotocole='%s' and etat = '%s')";
+        $afterWhere = " where id not in (select idprotocole from protocolechoisi where idsociete='%s' 
+                        and idcategorieprotocole='%s' and etat = '%s' and 
+                        idprotocole not in(select idProtocole from protocleDelete))";
         $afterWhere = sprintf($afterWhere,$idSociete,$idCategorieProtocole,Constante::$PROTOCOLE_ACTIVE);
         return GenericDb::find($temp,'protocole',array(),$afterWhere,$con);
      }
@@ -223,7 +225,7 @@ Flight::map('getAllProtocole',function(int $page/*num page*/,int $limitProtocole
     $protocoles = array();
     try{
         ///requette principale
-        $sql = "SELECT * FROM protocole";
+        $sql = "SELECT * FROM protocole where id not in(select idProtocole from protocleDelete)";
         if($all == "false"){
             //controlle valeur
             if(!is_numeric($page)||$page === 0){
@@ -328,7 +330,7 @@ Flight::map('getCategorieSociete',function(PDO $con){
     $res = array();
     try{
         //action: prendre tous les categories de societe
-        $res = GenericDb::find(CategorieSociete::class, "categoriesociete",array(),"", $con);
+        $res = GenericDb::find(CategorieSociete::class, "categoriesociete",array()," where id not in(select idCategorieSociete from categorieSocieteDelete)", $con);
         return $res;
     }
     catch(Exception $e){

@@ -8,3 +8,5 @@ require 'classes/SocieteDesinfection.php';
 require 'classes/SocieteAffiche.php';
 require 'classes/SocieteDelete.php';
 require 'classes/SocieteDesinfectionDelete.php';
+require 'classes/ProtocoleDelete.php';
+require 'classes/CategorieSocieteDelete.php';

@@ -186,6 +186,36 @@ Flight::map('getAllSocieteDesinfection', function (string $where, PDO $con) {
         throw $ex;
     }
 });
+Flight::map('verifyIfProtocoleMiasa', function (string $id, PDO $con) {
+    try {
+        $sql = "select societe.* from societe join  
+            (select distinct(idsociete) as soc from protocolechoisi where 
+            idprotocole='"+$id+"' and etat='"+Constante::$PRESTATION_ACTIVE+"')
+            as tab on tab.soc=societe.id";
+        var_dump($sql);
+        $ret = array();
+        $res = $con->query($sql);
+        $res->setFetchMode(PDO::FETCH_ASSOC);
+    
+        while ($donnees = $res->fetch(PDO::FETCH_ASSOC)) {
+            $ret[] = new Societe(
+                $donnees['id'],
+                $donnees['nom'],
+                $donnees['idcategoriesociete'],
+                $donnees['description'],
+                $donnees['lieu'],
+                $donnees['datecreation'],
+                $donnees['email'],
+                $donnees['tel'],
+                $donnees['coordonnee']
+            );
+        }
+        $res->closeCursor();
+        return $ret;
+    } catch (Exception $ex) {
+        throw $ex;
+    }
+});
 Flight::map('checkLatLng', function ($coordLat, $coordLong) {
     try {
         if (!floatval($coordLong) || !floatval($coordLat)) {

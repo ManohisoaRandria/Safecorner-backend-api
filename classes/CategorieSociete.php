@@ -15,6 +15,16 @@ class CategorieSociete implements JsonSerializable {
             'description' => $this->description
         ];
     }
+    public function update(PDO $con)
+    {
+        try {
+            GenericDb::update("categorieSociete",array(
+                "description"=>$this->description
+            )," id='".$this->id."'",false,$con);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
     /**
      * Get the value of id
      *

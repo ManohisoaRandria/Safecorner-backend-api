@@ -101,6 +101,12 @@ CREATE TABLE societeDesinfectionDelete(
   id VARCHAR(50) PRIMARY KEY,
   idSocieteDesinfection VARCHAR(50) REFERENCES societeDesinfection
 );
+CREATE TABLE protocoleDelete(
+  idProtocole VARCHAR(50) REFERENCES protocole
+);
+CREATE TABLE categorieSocieteDelete(
+  idCategorieSociete VARCHAR(50) REFERENCES categorieSociete
+);
 CREATE SEQUENCE seq_societedesinfectiondelete;
 create view protocoleDetail as
 select
