@@ -1058,8 +1058,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'categorieSociete', functio
         array("idcategoriesociete"=>$req->query['id'])," and idcategoriesociete not in(select idCategorieSociete from categorieSocieteDelete)",Flight::db());
         if(count($verif)!=0){
           Flight::json(
-            new ApiResponse("error", Constante::$ERROR_CODE['400'], $verif, "You have to remove this categorie societe 
-            from all those societes's categorie societe if you want to delete it"),
+            new ApiResponse("error", Constante::$ERROR_CODE['400'], $verif, "You have to remove this categorie societe from all those societes's categorie societe if you want to delete it"),
             Constante::$ERROR_CODE['400']
           );
         }else{
