@@ -989,7 +989,7 @@ Flight::route('DELETE|OPTIONS ' . Constante::$BASE . 'protocole', function () {
           throw new Exception("protocole not found, it might have already been deleted", Constante::$ERROR_CODE['400']);
         } 
         //verification hoe mbola misy societe manana an iny protocole iny ve
-        $verif=Flight::verifyIfProtocoleMiasa($req->query['id']);
+        $verif=Flight::verifyIfProtocoleMiasa($req->query['id'],Flight::db());
         if(count($verif)!=0){
           Flight::json(
             new ApiResponse("error", Constante::$SUCCES_CODE['400'], $verif, "You have to remove this protocole 
