@@ -521,7 +521,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'user/registration', function
 });
 // get maka societeDesinfection iray misraka amin'ny prestationany
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'oneSocieteDesinfection', function () {
-    Flight::getAccesControlPublic();
+    Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         Flight::json(
           "OK",
@@ -693,7 +693,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'allProtocole', function () {
 });
 // get categorie societe
 Flight::route('GET|OPTIONS ' . Constante::$BASE . 'categorieSociete', function () {
-    Flight::getAccesControlPublic();
+    Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         Flight::json(
           "OK",
@@ -1127,15 +1127,13 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societe', function () {
 });
 //update societe desinfection
 Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function () {
-    
+    Flight::getAccesControl();
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-        Flight::getAccesControl();
-        Flight::json(
-          "OK",
-          200
-        );
+      Flight::json(
+        "OK",
+        200
+      );
     } else {
-        Flight::getAccesControl();
       Flight::protectionPage("private");
       $req = Flight::request();
       if (!isset($req->data->id) || $req->data->id == "") {

@@ -1,7 +1,7 @@
 <?php
 
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'testa', function () {
-  Flight::getAccesControlPublic();
+  Flight::getAccesControl();
 
   Flight::json(
     array(
@@ -44,7 +44,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'user/acces-token', function (
 // *************
 //initialisation token mobile, normalement indray ihany par idunique ana phone
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'mobile/init', function () {
-  Flight::getAccesControlPublic();
+  Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
@@ -77,7 +77,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'mobile/init', function () {
 //ra limit sy offset de afaka mjump amna page specifique fa ra misy  manampy tampoka no blem,mo ra bdb le donnee de lent b
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'societeDesinfect', function () {
 
-  Flight::getAccesControlPublic();
+  Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
@@ -150,7 +150,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'societeDesinfect', function 
 // ************
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'protocoles', function () {
 
-  Flight::getAccesControlPublic();
+  Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
@@ -214,7 +214,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'protocoles', function () {
 //raha tena ho tsis dol reo rehetra reo fa categorie=all ihany de  tsy mamoka inin fa eo am accueil
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'search', function () {
 
-  Flight::getAccesControlPublic();
+  Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
@@ -300,7 +300,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'search', function () {
 // ************
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'prestations', function () {
 
-  Flight::getAccesControlPublic();
+  Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
