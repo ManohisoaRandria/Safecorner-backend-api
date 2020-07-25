@@ -1127,13 +1127,15 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societe', function () {
 });
 //update societe desinfection
 Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'societeDesinfect', function () {
-    Flight::getAccesControl();
+    
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        Flight::getAccesControl();
         Flight::json(
           "OK",
           200
         );
     } else {
+        Flight::getAccesControl();
       Flight::protectionPage("private");
       $req = Flight::request();
       if (!isset($req->data->id) || $req->data->id == "") {
