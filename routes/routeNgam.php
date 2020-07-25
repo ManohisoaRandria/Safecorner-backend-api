@@ -214,7 +214,7 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'protocoles', function () {
 //raha tena ho tsis dol reo rehetra reo fa categorie=all ihany de  tsy mamoka inin fa eo am accueil
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'search', function () {
 
-  Flight::getAccesControlPublic();
+  Flight::getAccesControl();
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Flight::json(
       "OK",
