@@ -59,7 +59,7 @@ Flight::map('logOut', function ($token, $con) {
     }
 });
 Flight::map('getToken', function (string $iduser) {
-    $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
+    $date = new DateTime("now", new DateTimeZone('Africa/Nairobi'));
     date_add($date, date_interval_create_from_date_string('2 minutes'));
     $token = "%s%s";
     $token = sprintf($token, $date->format("Y-m-d H:i:s"), $iduser);
@@ -111,7 +111,7 @@ Flight::map('decrypt', function (string $encString, string $encryption_key) {
 });
 Flight::map('getAccesToken', function (string $iduser, string $name) {
     $secretKey = Constante::$ACCES_TOKEN_KEY;
-    $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
+    $date = new DateTime("now", new DateTimeZone('Africa/Nairobi'));
     date_add($date, date_interval_create_from_date_string('1 minutes'));
     $id = "access-%s";
     $token = sprintf($id, $date->format("Y-m-d H:i:s"));
@@ -141,7 +141,7 @@ Flight::map('getAccesToken', function (string $iduser, string $name) {
 });
 Flight::map('getRefreshToken', function (string $iduser, string $name) {
     $secretKey = Constante::$REFRESH_TOKEN_KEY;
-    $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
+    $date = new DateTime("now", new DateTimeZone('Africa/Nairobi'));
     date_add($date, date_interval_create_from_date_string('1 minutes'));
     $id = "refresh-%s";
     $token = sprintf($id, $date->format("Y-m-d H:i:s"));
@@ -172,7 +172,7 @@ Flight::map('getRefreshToken', function (string $iduser, string $name) {
 //token for mobile users,endeless token, indray mgenerer ihany
 Flight::map('getMobileToken', function (string $uniqueMobileId) {
     $secretKey = Constante::$MOBILE_TOKEN_KEY;
-    $date = new DateTime("now",new DateTimeZone('Africa/Nairobi'));
+    $date = new DateTime("now", new DateTimeZone('Africa/Nairobi'));
     date_add($date, date_interval_create_from_date_string('1 minutes'));
     $id = "mobile-%s";
     $token = sprintf($id, $date->format("Y-m-d H:i:s"));
@@ -245,12 +245,12 @@ Flight::map('refreshAccessToken', function (PDO $con) {
         //verifiena ao am bdd aloha sode efa loged out
         $rt = new RefreshToken("", sha1($token), Constante::$REFRESH_TOKEN_VALIDE);
         $rt = $rt->getByToken($con);
-        if ($rt == null)throw new Exception("no login for this users dd", Constante::$ERROR_CODE['400']);
+        if ($rt == null) throw new Exception("no login for this users dd", Constante::$ERROR_CODE['400']);
 
-       
+
         $data = Flight::verifyToken($token, "rt", $con);
-      
-        
+
+
         //eto maka anle data
         $ac = Flight::getAccesToken($data->data->id, $data->data->nom);
         return $ac;
@@ -295,11 +295,18 @@ Flight::map('getTokenHeader', function (string $type) {
 });
 //Content-Type,Connection,Accept
 Flight::map('getAccesControl', function () {
+    // $httpOrigin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : null;
+    $httpOrigin = $_SERVER['HTTP_ORIGIN'];
+    if ($httpOrigin == 'https://safe-corner.herokuapp.com') {
         header('Access-Control-Allow-Origin: https://safe-corner.herokuapp.com');
-        header('Access-Control-Allow-Headers: sc-access-token,sc-init,sc-refresh-token,Content-Type');
-        header('Access-Control-Allow-Credentials: true');
-        header('Content-Type: application/json; charset=utf-8');
-        header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
+    } else if ($httpOrigin == 'http://localhost:4200') {
+        header('Access-Control-Allow-Origin: http://localhost:4200');
+    }
+
+    header('Access-Control-Allow-Headers: sc-access-token,sc-init,sc-refresh-token,Content-Type');
+    header('Access-Control-Allow-Credentials: true');
+    header('Content-Type: application/json; charset=utf-8');
+    header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
 });
 
 // Flight::map('getAccesControlPublic', function () {
@@ -322,7 +329,7 @@ Flight::map('protectionPage', function ($Pagetype) {
                 $res = Flight::verifyToken($token, "mobil");
                 return $res;
             }
-        }else if($Pagetype === "logout"){
+        } else if ($Pagetype === "logout") {
             $token = Flight::getTokenHeader("rt");
             $verificationType = "rt";
             if (empty($token))  throw new Exception("token missing", Constante::$ERROR_CODE['401']);
@@ -340,12 +347,12 @@ Flight::map('protectionPage', function ($Pagetype) {
         if ($ex->getCode() != 500) {
             // echo $ex->getCode();
             // Flight::stop();
-           
-            Flight::halt($ex->getCode(),json_encode(new ApiResponse("error", $ex->getCode(), null,$ex->getMessage())));
+
+            Flight::halt($ex->getCode(), json_encode(new ApiResponse("error", $ex->getCode(), null, $ex->getMessage())));
         } else {
             // Flight::stop();
-        
-            Flight::halt($ex->getCode(),json_encode(new ApiResponse("error", $ex->getCode(), null,"server error please contact api providers")));
+
+            Flight::halt($ex->getCode(), json_encode(new ApiResponse("error", $ex->getCode(), null, "server error please contact api providers")));
         }
         throw $ex;
     }
