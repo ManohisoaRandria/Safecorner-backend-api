@@ -247,9 +247,9 @@ Flight::map('refreshAccessToken', function (PDO $con) {
         $token = Flight::getTokenHeader("rt");
         if (empty($token)) throw new Exception("refresh token not found");
         //verifiena ao am bdd aloha sode efa loged out
-        $rt = new RefreshToken("", sha1($token), Constante::$REFRESH_TOKEN_VALIDE);
-        $rt = $rt->getByToken($con);
-        if ($rt == null) throw new Exception("no login for this users dd", Constante::$ERROR_CODE['400']);
+        // $rt = new RefreshToken("", sha1($token), Constante::$REFRESH_TOKEN_VALIDE);
+        // $rt = $rt->getByToken($con);
+        // if ($rt == null) throw new Exception("no login for this users dd", Constante::$ERROR_CODE['400']);
 
 
         $data = Flight::verifyToken($token, "rt", $con);
@@ -337,7 +337,7 @@ Flight::map('protectionPage', function ($Pagetype) {
             $token = Flight::getTokenHeader("rt");
             $verificationType = "rt";
             if (empty($token))  throw new Exception("token missing", Constante::$ERROR_CODE['401']);
-            $res = Flight::verifyToken($token, $verificationType);
+            $res = Flight::verifyToken($token, $verificationType,Flight::db());
             return $token;
         } else {
             $verificationType = "ac";
