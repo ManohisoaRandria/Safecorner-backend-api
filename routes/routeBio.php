@@ -196,7 +196,7 @@ Flight::route('POST|OPTIONS ' . Constante::$BASE . 'categorieSociete', function 
             try {
                 $con->beginTransaction();
                 //verification existance description
-                if (Flight::validationNom('categorieSociete', 'description', $req->data->description, $con)) {
+                if (Flight::validationNom('categorieSociete', 'description', $req->data->description, $con,' and id not in (select idcategoriesociete from categoriesocietedelete)')) {
                     throw new Exception("This description already exists.", Constante::$ERROR_CODE['400']);
                 }
                 //Donnees
