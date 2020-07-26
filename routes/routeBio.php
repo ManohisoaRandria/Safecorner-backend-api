@@ -1316,7 +1316,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'numberData', function () {
         200
       );
     } else {
-        // Flight::protectionPage("private");
+        Flight::protectionPage("private");
         $con = Flight::db();
         try {
           $res = Flight::getNumberData($con);
