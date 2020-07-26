@@ -1307,3 +1307,35 @@ Flight::route('PUT|OPTIONS ' . Constante::$BASE . 'prestation', function () {
       }
     }
 });
+// get nombreData
+Flight::route('GET|OPTIONS ' . Constante::$BASE . 'numberData', function () {
+    Flight::getAccesControl();
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+      Flight::json(
+        "OK",
+        200
+      );
+    } else {
+        // Flight::protectionPage("private");
+        $con = Flight::db();
+        try {
+          $res = Flight::getNumberData($con);
+          Flight::json(
+            new ApiResponse("succes", Constante::$SUCCES_CODE['201'],$res,"get success"),
+            Constante::$SUCCES_CODE['201']
+          );
+        } catch (Exception $ex) {
+          if ($ex->getCode() == 400) {
+            Flight::json(
+              new ApiResponse("error", Constante::$ERROR_CODE['400'], null, $ex->getMessage()),
+              Constante::$ERROR_CODE['400']
+            );
+          } else {
+            Flight::json(
+              new ApiResponse("error", Constante::$ERROR_CODE['500'], null,$ex->getMessage()),
+              Constante::$ERROR_CODE['500']
+            );
+          }
+        }
+    }
+});

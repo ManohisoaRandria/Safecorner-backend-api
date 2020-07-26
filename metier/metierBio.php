@@ -352,3 +352,23 @@ Flight::map('getCategorieProtocole',function(PDO $con){
     }
     return $res;
 });
+
+Flight::map('getNumberData',function(PDO $con){  
+    $res = array();
+    try{
+        //number societe
+        $nbSociete = Flight::Count("societe"," id not in (select idsociete from societedelete)",$con);
+        //number societe desinfection
+        $nbSocieteDesinfection = Flight::Count("societeDesinfection"," id not in (select idsocietedesinfection from societedesinfectiondelete)",$con);
+        //number protocoles
+        $nbProtocole = Flight::Count("protocole"," id not in (select idprotocole from protocoledelete)",$con);
+        $res = array('societe'=> $nbSociete,
+                     'societeDesinfection' => $nbSocieteDesinfection,
+                     'protocole'=>$nbProtocole);
+    }
+    catch(Exception $e){
+        throw $e;
+    }
+    return $res;
+});
+
