@@ -1322,7 +1322,7 @@ Flight::route('GET|OPTIONS ' . Constante::$BASE . 'numberData', function () {
           $res = Flight::getNumberData($con);
           Flight::json(
             new ApiResponse("succes", Constante::$SUCCES_CODE['200'],$res,"get success"),
-            Constante::$SUCCES_CODE['201']
+            Constante::$SUCCES_CODE['200']
           );
         } catch (Exception $ex) {
           if ($ex->getCode() == 400) {
