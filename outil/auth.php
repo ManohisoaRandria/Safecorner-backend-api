@@ -208,6 +208,10 @@ Flight::map('verifyToken', function (string $token, string $type, PDO $con = nul
         else if ($type === "rt") {
             $key = Constante::$REFRESH_TOKEN_KEY;
             $tokenVerif = Flight::decrypt($tokenVerif, Constante::$REFRESH_ENCRYPTION_KEY);
+            //verifierna sode efa tsy valide tsony, zany hoe efa nbootena tam serveur
+            $rt = new RefreshToken("", sha1($token), Constante::$REFRESH_TOKEN_VALIDE);
+            $rt = $rt->getByToken($con);
+            if ($rt == null) throw new Exception("no login, you might have been booted from the server", Constante::$ERROR_CODE['400']);
         }
         $retour = JWT::decode($tokenVerif, $key, array('HS512'));
         return $retour;
