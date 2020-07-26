@@ -211,12 +211,17 @@ Flight::map('verifyToken', function (string $token, string $type, PDO $con = nul
             //verifierna sode efa tsy valide tsony, zany hoe efa nbootena tam serveur
             $rt = new RefreshToken("", sha1($token), Constante::$REFRESH_TOKEN_VALIDE);
             $rt = $rt->getByToken($con);
-            if ($rt == null) throw new Exception("no login, you might have been booted from the server", Constante::$ERROR_CODE['400']);
+            if ($rt == null) throw new Exception("no login, you might have been booted from the server", Constante::$ERROR_CODE['403']);
         }
         $retour = JWT::decode($tokenVerif, $key, array('HS512'));
         return $retour;
     } catch (Exception $th) {
         if ($type === "rt") {
+            if($th->getCode()==403 && $th->getMessage()=="no login, you might have been booted from the server"){
+                throw new Exception($th->getMessage(), Constante::$ERROR_CODE['403']);
+            }else{
+                return 'lany fa mandeh fona';
+            }
             // //raha refresh token misy blem de averina fona fa hatao logoout iny aveo
             // try {
             //     $con->beginTransaction();
@@ -236,7 +241,6 @@ Flight::map('verifyToken', function (string $token, string $type, PDO $con = nul
             // } finally {
             //     $con->commit();
             // }
-            return 'lany fa mandeh fona';
         } else {
             throw new Exception($th->getMessage(), Constante::$ERROR_CODE['401']);
         }
@@ -259,7 +263,7 @@ Flight::map('refreshAccessToken', function (PDO $con) {
         $ac = Flight::getAccesToken($data->data->id, $data->data->nom);
         return $ac;
     } catch (Exception $th) {
-        throw new Exception($th->getMessage(), Constante::$ERROR_CODE['401']);
+        throw new Exception($th->getMessage(), $th->getCode());
     }
 });
 
