@@ -40,7 +40,7 @@ class Constante
     public static $HISTORIQUE_PROTOCOLE_ADD = 1;
     public static $HISTORIQUE_PROTOCOLE_DELETE = 10;
     public static $MAX_PAGINATION_PER_PAGE = 20;
-    public static $MAX_LOGIN_SESSION_PER_USER = 2;
+    public static $MAX_LOGIN_SESSION_PER_USER = 5;
     public static $BASE = '/api/v1/';
     public static $ACCES_TOKEN_EXPIRE_TIME = 3600 /*1 heures*/; //seconde
     public static $REFRESH_TOKEN_EXPIRE_TIME = 86400 /*1  jour*/; //seconde
