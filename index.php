@@ -22,7 +22,7 @@ require 'routes/routeBio.php';
 
 // $dbopts = parse_url(getenv('DATABASE_URL'));
 // Flight::register('db', 'PDO', array(, , , ,));
-Flight::register('c', 'Cache',array(1));
+$def=Flight::register('c', 'Cache',array(1));
 
 Flight::register('db', 'PDO', array(
   'pgsql:host=ec2-176-34-123-50.eu-west-1.compute.amazonaws.com;port=5432;dbname=d5kg541rg9ubav;options=\'--client_encoding=UTF8\'',
