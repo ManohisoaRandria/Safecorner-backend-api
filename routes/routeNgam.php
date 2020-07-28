@@ -10,10 +10,10 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'testa', function () {
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'setId', function () {
   if(!Flight::get('test')){
     $id = Flight::set('test',1);
-    Flight::json($id);
+    Flight::json(Flight::get('test'));
   }else{
     $id = Flight::set('test',Flight::get('test')+1);
-    Flight::json($id);
+    Flight::json(Flight::get('test'));
   }
   
   
