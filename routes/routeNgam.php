@@ -2,15 +2,15 @@
 
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'testa', function () {
   //Flight::getAccesControl();
-  $id = Flight::get('test');
+  $id = Flight::c()->getId();
   Flight::json(
    $id
   );
 });
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'setId', function () {
 
-    Flight::set('test',Flight::get('test')+1);
-    Flight::json(Flight::get('test'));
+    Flight::c()->setId(Flight::c()->getId()+1);
+    Flight::json(Flight::c()->getId());
   
 });
 //back office,

@@ -10,3 +10,4 @@ require 'classes/SocieteDelete.php';
 require 'classes/SocieteDesinfectionDelete.php';
 require 'classes/ProtocoleDelete.php';
 require 'classes/CategorieSocieteDelete.php';
+require 'classes/Cache.php';
