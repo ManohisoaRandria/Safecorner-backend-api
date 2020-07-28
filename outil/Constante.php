@@ -42,7 +42,7 @@ class Constante
     public static $MAX_PAGINATION_PER_PAGE = 20;
     public static $MAX_LOGIN_SESSION_PER_USER = 5;
     public static $BASE = '/api/v1/';
-    public static $ACCES_TOKEN_EXPIRE_TIME = 1500 /*25 minutes*/; //seconde
+    public static $ACCES_TOKEN_EXPIRE_TIME = 600 /*10 minutes*/; //seconde
     public static $REFRESH_TOKEN_EXPIRE_TIME = 86400 /*1  jour*/; //seconde
     public static $REFRESH_TOKEN_VALIDE = 1;
     public static $REFRESH_TOKEN_REVOKED = 10;

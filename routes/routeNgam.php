@@ -1,13 +1,14 @@
 <?php
 
 Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'testa', function () {
-  Flight::getAccesControl();
-
+  //Flight::getAccesControl();
+  $id = Flight::get('test');
   Flight::json(
-    array(
-      "now"=>new DateTime(),
-      "nowAfrica"=>new DateTime("now",new DateTimeZone('Africa/Nairobi'))
-    )
+    // array(
+    //   "now"=>new DateTime(),
+    //   "nowAfrica"=>new DateTime("now",new DateTimeZone('Africa/Nairobi'))
+    // )
+    ''
 );
 });
 //back office,
