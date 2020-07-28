@@ -4,12 +4,19 @@ Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'testa', function () {
   //Flight::getAccesControl();
   $id = Flight::get('test');
   Flight::json(
-    // array(
-    //   "now"=>new DateTime(),
-    //   "nowAfrica"=>new DateTime("now",new DateTimeZone('Africa/Nairobi'))
-    // )
-    ''
-);
+   $id
+  );
+});
+Flight::route('GET|OPTIONS  ' . Constante::$BASE . 'setId', function () {
+  if(!Flight::get('test')){
+    $id = Flight::set('test',1);
+    Flight::json($id);
+  }else{
+    $id = Flight::set('test',Flight::get('test')+1);
+    Flight::json($id);
+  }
+  
+  
 });
 //back office,
 //refresh the token of the user
